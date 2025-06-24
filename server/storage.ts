@@ -9,6 +9,8 @@ import {
   type InsertQuiz, 
   type InsertProgress 
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   // Rules
@@ -198,4 +200,85 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage implementation
+export class DatabaseStorage implements IStorage {
+  async getAllRules(): Promise<Rule[]> {
+    const allRules = await db.select().from(rules).orderBy(rules.part, rules.ruleNumber);
+    return allRules;
+  }
+
+  async getRuleById(id: number): Promise<Rule | undefined> {
+    const [rule] = await db.select().from(rules).where(eq(rules.id, id));
+    return rule || undefined;
+  }
+
+  async getRuleByNumber(ruleNumber: string): Promise<Rule | undefined> {
+    const [rule] = await db.select().from(rules).where(eq(rules.ruleNumber, ruleNumber));
+    return rule || undefined;
+  }
+
+  async createRule(insertRule: InsertRule): Promise<Rule> {
+    const [rule] = await db
+      .insert(rules)
+      .values(insertRule)
+      .returning();
+    return rule;
+  }
+
+  async getQuizzesByRuleId(ruleId: number): Promise<Quiz[]> {
+    const quizList = await db.select().from(quizzes).where(eq(quizzes.ruleId, ruleId));
+    return quizList;
+  }
+
+  async getQuizById(id: number): Promise<Quiz | undefined> {
+    const [quiz] = await db.select().from(quizzes).where(eq(quizzes.id, id));
+    return quiz || undefined;
+  }
+
+  async createQuiz(insertQuiz: InsertQuiz): Promise<Quiz> {
+    const [quiz] = await db
+      .insert(quizzes)
+      .values(insertQuiz)
+      .returning();
+    return quiz;
+  }
+
+  async getUserProgress(userId: string): Promise<Progress[]> {
+    const progressList = await db.select().from(userProgress).where(eq(userProgress.userId, userId));
+    return progressList;
+  }
+
+  async getProgressByUserAndRule(userId: string, ruleId: number): Promise<Progress | undefined> {
+    const [progress] = await db
+      .select()
+      .from(userProgress)
+      .where(and(eq(userProgress.userId, userId), eq(userProgress.ruleId, ruleId)));
+    return progress || undefined;
+  }
+
+  async updateProgress(userId: string, ruleId: number, progressUpdate: Partial<InsertProgress>): Promise<Progress> {
+    const existing = await this.getProgressByUserAndRule(userId, ruleId);
+    
+    if (existing) {
+      const [updated] = await db
+        .update(userProgress)
+        .set(progressUpdate)
+        .where(and(eq(userProgress.userId, userId), eq(userProgress.ruleId, ruleId)))
+        .returning();
+      return updated;
+    } else {
+      return this.createProgress({ userId, ruleId, ...progressUpdate });
+    }
+  }
+
+  async createProgress(insertProgress: InsertProgress): Promise<Progress> {
+    const [progress] = await db
+      .insert(userProgress)
+      .values(insertProgress)
+      .returning();
+    return progress;
+  }
+}
+
+// Use DatabaseStorage instead of MemStorage
+export const storage = new DatabaseStorage();
