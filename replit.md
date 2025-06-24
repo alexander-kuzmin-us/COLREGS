@@ -111,6 +111,12 @@ Changelog:
   - Created DatabaseStorage class with full CRUD operations
   - Automated database seeding with COLREGS rules and quizzes
   - Type-safe database queries with Drizzle ORM
+- June 24, 2025. Added comprehensive FAQ section:
+  - Created dedicated FAQ page with categorized questions
+  - Added FAQ schema markup for enhanced SEO
+  - Integrated FAQ navigation in header
+  - Included quick start guide and contact information
+  - Covered platform usage, content, and technical support
 
 ## User Preferences
 

@@ -89,6 +89,9 @@ export default function Home() {
             </div>
 
             <div className="flex items-center space-x-2 sm:space-x-4">
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/faq">FAQ</Link>
+              </Button>
               <div className="hidden sm:block text-right">
                 <div className="text-sm font-medium text-gray-700">Progress</div>
                 <div className="text-xs text-gray-500">{completedRules} of {totalRules} rules</div>

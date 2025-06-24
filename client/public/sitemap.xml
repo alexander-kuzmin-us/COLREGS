@@ -8,6 +8,14 @@
     <priority>1.0</priority>
   </url>
   
+  <!-- FAQ Page -->
+  <url>
+    <loc>https://colregs-academy.replit.app/faq</loc>
+    <lastmod>2024-12-25T08:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
   <!-- COLREGS Rules -->
   <url>
     <loc>https://colregs-academy.replit.app/rule/1</loc>
