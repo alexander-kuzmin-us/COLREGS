@@ -6,11 +6,13 @@ import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle, XCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
-import type { Quiz } from "@shared/schema";
+import { QuizSchemaMarkup } from "@/components/seo/schema-markup";
+import type { Quiz, Rule } from "@shared/schema";
 
 interface QuizSectionProps {
   quizzes: Quiz[];
   ruleId: number;
+  rule?: Rule;
 }
 
 interface QuizResult {
@@ -20,7 +22,7 @@ interface QuizResult {
   score: number;
 }
 
-export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
+export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps) {
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [quizResults, setQuizResults] = useState<Record<number, QuizResult>>({});
@@ -85,6 +87,17 @@ export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
 
   return (
     <Card className="mb-4 sm:mb-6">
+      {rule && (
+        <QuizSchemaMarkup 
+          rule={rule}
+          quizData={{
+            totalQuestions: quizzes.length,
+            currentQuestion: currentQuizIndex + 1,
+            question: currentQuiz.question,
+            options: currentQuiz.options
+          }}
+        />
+      )}
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-base sm:text-lg">Knowledge Check</CardTitle>

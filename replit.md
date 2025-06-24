@@ -97,6 +97,13 @@ COLREGS Academy is a maritime safety education web application that teaches the 
 
 Changelog:
 - June 24, 2025. Initial setup
+- June 24, 2025. Added comprehensive SEO optimization:
+  - Schema.org structured data for educational content
+  - Open Graph and Twitter meta tags
+  - Dynamic SEO meta tags for all pages
+  - Sitemap.xml and robots.txt
+  - React Helmet for dynamic head management
+  - Mobile-responsive design improvements
 
 ## User Preferences
 

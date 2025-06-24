@@ -97,6 +97,37 @@ export default function RulePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>{`COLREGS Rule ${rule.ruleNumber} - ${rule.title} | Maritime Safety Training`}</title>
+        <meta name="description" content={`Learn COLREGS Rule ${rule.ruleNumber}: ${rule.title}. ${rule.plainEnglish} Master maritime collision prevention with interactive lessons, key points, and knowledge checks.`} />
+        <meta name="keywords" content={`COLREGS Rule ${rule.ruleNumber}, ${rule.title.toLowerCase()}, maritime safety, collision prevention, ${rule.keyPoints.join(', ').toLowerCase()}, navigation rules`} />
+        <link rel="canonical" href={`https://colregs-academy.replit.app/rule/${rule.ruleNumber}`} />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content={`COLREGS Rule ${rule.ruleNumber} - ${rule.title}`} />
+        <meta property="og:description" content={rule.plainEnglish} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://colregs-academy.replit.app/rule/${rule.ruleNumber}`} />
+        
+        {/* Twitter */}
+        <meta name="twitter:title" content={`COLREGS Rule ${rule.ruleNumber} - ${rule.title}`} />
+        <meta name="twitter:description" content={rule.plainEnglish} />
+        
+        {/* Article Schema */}
+        <meta property="article:section" content={`Part ${rule.part} - ${rule.partTitle}`} />
+        <meta property="article:tag" content="Maritime Safety" />
+        <meta property="article:tag" content="COLREGS" />
+        {rule.keyPoints.map((point, index) => (
+          <meta key={index} property="article:tag" content={point} />
+        ))}
+      </Helmet>
+      
+      <RuleSchemaMarkup 
+        rule={rule}
+        currentProgress={overallProgress}
+        totalRules={totalRules}
+      />
+      
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -260,7 +291,7 @@ export default function RulePage() {
 
             {/* Quiz Section */}
             {quizzes && quizzes.length > 0 && (
-              <QuizSection quizzes={quizzes} ruleId={rule.id} />
+              <QuizSection quizzes={quizzes} ruleId={rule.id} rule={rule} />
             )}
 
             {/* Related Rules */}

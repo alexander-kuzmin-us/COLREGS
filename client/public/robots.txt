@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://colregs-academy.replit.app/sitemap.xml
+
+# SEO optimized for maritime education content
+# Allow all search engines to crawl educational content
+# Encourage indexing of rule pages and educational materials
+
+# Block admin or private areas if they exist
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_vite/
+Disallow: /src/
+
+# Allow crawling of main educational content
+Allow: /rule/
+Allow: /part/
+Allow: /quiz/
+
+# Crawl delay for respectful indexing
+Crawl-delay: 1
