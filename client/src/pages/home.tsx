@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { Ship, Search, BookOpen, Award, Clock, Target } from "lucide-react";
 import { Link } from "wouter";
 import type { Rule } from "@shared/schema";
 import { useProgress } from "@/hooks/use-progress";
+import { HomepageSchemaMarkup } from "@/components/seo/schema-markup";
 
 export default function Home() {
   const { data: rules, isLoading } = useQuery<Rule[]>({
@@ -35,6 +37,29 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>COLREGS Academy - Learn Maritime Safety Rules | Interactive Training Platform</title>
+        <meta name="description" content={`Master maritime safety with COLREGS Academy. Interactive training for ${totalRules} international collision prevention rules. ${completedRules} rules completed, ${Math.round(overallProgress)}% progress. Perfect for mariners, boat operators, and maritime professionals.`} />
+        <meta name="keywords" content="COLREGS training, maritime safety course, boat navigation rules, collision prevention, maritime education, sailing safety, vessel navigation, marine training certification" />
+        <link rel="canonical" href="https://colregs-academy.replit.app/" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="COLREGS Academy - Interactive Maritime Safety Training" />
+        <meta property="og:description" content={`Learn maritime collision prevention rules through interactive lessons and quizzes. ${totalRules} rules available with ${Math.round(overallProgress)}% completion rate.`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://colregs-academy.replit.app/" />
+        
+        {/* Twitter */}
+        <meta name="twitter:title" content="COLREGS Academy - Maritime Safety Training" />
+        <meta name="twitter:description" content={`Interactive platform for learning maritime collision prevention rules. ${totalRules} rules with comprehensive quizzes and explanations.`} />
+      </Helmet>
+      
+      <HomepageSchemaMarkup 
+        totalRules={totalRules}
+        completedRules={completedRules}
+        overallProgress={overallProgress}
+      />
+      
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

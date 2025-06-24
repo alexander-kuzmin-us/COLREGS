@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
+import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ import { useProgress } from "@/hooks/use-progress";
 import Sidebar from "@/components/sidebar";
 import QuizSection from "@/components/quiz";
 import ProgressModal from "@/components/progress-modal";
+import { RuleSchemaMarkup } from "@/components/seo/schema-markup";
 import { useState } from "react";
 
 export default function RulePage() {
