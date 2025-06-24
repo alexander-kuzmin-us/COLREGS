@@ -43,8 +43,9 @@ COLREGS Academy is a maritime safety education web application that teaches the 
 
 ### Storage Layer
 - **Interface**: IStorage abstraction for data operations
-- **Implementation**: In-memory storage for development (MemStorage class)
-- **Database Integration**: Ready for PostgreSQL via Drizzle ORM
+- **Implementation**: PostgreSQL database with Drizzle ORM (DatabaseStorage class)
+- **Database**: Neon PostgreSQL with connection pooling and type-safe queries
+- **Seeding**: Automated database seeding with initial COLREGS rules and quizzes
 
 ## Data Flow
 
@@ -104,6 +105,12 @@ Changelog:
   - Sitemap.xml and robots.txt
   - React Helmet for dynamic head management
   - Mobile-responsive design improvements
+- June 24, 2025. Implemented PostgreSQL database:
+  - Migrated from in-memory storage to persistent PostgreSQL
+  - Added Neon serverless database with connection pooling
+  - Created DatabaseStorage class with full CRUD operations
+  - Automated database seeding with COLREGS rules and quizzes
+  - Type-safe database queries with Drizzle ORM
 
 ## User Preferences
 
