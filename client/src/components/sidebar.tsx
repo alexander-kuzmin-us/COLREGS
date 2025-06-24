@@ -88,12 +88,12 @@ export default function Sidebar({ currentRuleId }: SidebarProps) {
   };
 
   return (
-    <aside className="w-80 flex-shrink-0">
+    <aside className="w-full lg:w-80 flex-shrink-0">
       <Card className="sticky top-24">
         <CardHeader>
-          <CardTitle>Course Modules</CardTitle>
+          <CardTitle className="text-base sm:text-lg">Course Modules</CardTitle>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
           <div className="space-y-2">
             {Object.entries(rulesByPart).map(([part, partRules]) => {
               const completedInPart = partRules.filter(rule => 

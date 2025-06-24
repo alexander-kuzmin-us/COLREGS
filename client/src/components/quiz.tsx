@@ -84,28 +84,28 @@ export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
   if (!currentQuiz) return null;
 
   return (
-    <Card className="mb-6">
+    <Card className="mb-4 sm:mb-6">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Knowledge Check</CardTitle>
-          <div className="text-sm text-gray-600">
+          <CardTitle className="text-base sm:text-lg">Knowledge Check</CardTitle>
+          <div className="text-xs sm:text-sm text-gray-600">
             <span className="font-medium">Question {currentQuizIndex + 1} of {quizzes.length}</span>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-8">
-        <div className="mb-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
+      <CardContent className="p-4 sm:p-6 lg:p-8">
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-3 sm:mb-4">
             {currentQuiz.question}
           </h3>
 
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {currentQuiz.options.map((option, index) => {
               const isSelected = selectedAnswer === index;
               const isCorrect = result?.correctAnswer === index;
               const isIncorrect = hasSubmitted && isSelected && !result?.correct;
               
-              let className = "flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-colors";
+              let className = "flex items-start space-x-2 sm:space-x-3 p-3 sm:p-4 border rounded-lg cursor-pointer transition-colors";
               
               if (hasSubmitted) {
                 if (isCorrect) {
@@ -136,12 +136,12 @@ export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
                     disabled={hasSubmitted}
                     className="mt-1 text-primary"
                   />
-                  <span className="text-gray-700 flex-1">{option}</span>
+                  <span className="text-gray-700 flex-1 text-sm sm:text-base">{option}</span>
                   {hasSubmitted && isCorrect && (
-                    <CheckCircle className="text-green-600" size={20} />
+                    <CheckCircle className="text-green-600" size={18} />
                   )}
                   {hasSubmitted && isIncorrect && (
-                    <XCircle className="text-red-600" size={20} />
+                    <XCircle className="text-red-600" size={18} />
                   )}
                 </label>
               );
@@ -170,11 +170,12 @@ export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
           </Alert>
         )}
 
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-4 sm:mt-6 space-y-3 sm:space-y-0">
           <Button
             variant="outline"
             onClick={goToPreviousQuiz}
             disabled={currentQuizIndex === 0}
+            className="w-full sm:w-auto"
           >
             <ChevronLeft size={16} />
             Previous
@@ -184,7 +185,7 @@ export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
             <Button
               onClick={handleSubmitAnswer}
               disabled={!canSubmit || submitQuizMutation.isPending}
-              className="bg-primary hover:bg-primary/90"
+              className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
             >
               {submitQuizMutation.isPending ? "Submitting..." : "Submit Answer"}
             </Button>
@@ -192,7 +193,7 @@ export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
             <Button
               onClick={goToNextQuiz}
               disabled={currentQuizIndex === quizzes.length - 1}
-              className="bg-primary hover:bg-primary/90"
+              className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
             >
               Next
               <ChevronRight size={16} className="ml-1" />
@@ -201,8 +202,8 @@ export default function QuizSection({ quizzes, ruleId }: QuizSectionProps) {
         </div>
 
         {/* Progress bar for quiz */}
-        <div className="mt-6">
-          <div className="flex justify-between text-sm text-gray-600 mb-2">
+        <div className="mt-4 sm:mt-6">
+          <div className="flex justify-between text-xs sm:text-sm text-gray-600 mb-2">
             <span>Quiz Progress</span>
             <span>{Math.round(progress)}% Complete</span>
           </div>

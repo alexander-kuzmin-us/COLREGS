@@ -296,35 +296,37 @@ export default function RulePage() {
 
             {/* Navigation */}
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
                   {previousRule ? (
-                    <Link href={`/rule/${previousRule.ruleNumber}`}>
-                      <Button variant="outline" className="flex items-center space-x-3">
+                    <Link href={`/rule/${previousRule.ruleNumber}`} className="w-full sm:w-auto">
+                      <Button variant="outline" className="w-full sm:w-auto flex items-center space-x-2">
                         <ChevronLeft size={16} />
-                        <div className="text-left">
+                        <div className="text-left hidden sm:block">
                           <div className="font-medium">Previous Rule</div>
                           <div className="text-sm text-gray-600">Rule {previousRule.ruleNumber} - {previousRule.title}</div>
                         </div>
+                        <span className="sm:hidden">Previous</span>
                       </Button>
                     </Link>
                   ) : (
-                    <div />
+                    <div className="w-full sm:w-auto" />
                   )}
                   
                   <Button 
                     onClick={handleMarkComplete}
                     disabled={isCompleted}
-                    className={isCompleted ? "bg-green-600 hover:bg-green-700" : "bg-green-600 hover:bg-green-700"}
+                    className={`w-full sm:w-auto ${isCompleted ? "bg-green-600 hover:bg-green-700" : "bg-green-600 hover:bg-green-700"}`}
                   >
                     <Check className="mr-2" size={16} />
                     {isCompleted ? "Completed" : "Mark as Complete"}
                   </Button>
                   
                   {nextRule ? (
-                    <Link href={`/rule/${nextRule.ruleNumber}`}>
-                      <Button variant="outline" className="flex items-center space-x-3">
-                        <div className="text-right">
+                    <Link href={`/rule/${nextRule.ruleNumber}`} className="w-full sm:w-auto">
+                      <Button variant="outline" className="w-full sm:w-auto flex items-center space-x-2">
+                        <span className="sm:hidden">Next</span>
+                        <div className="text-right hidden sm:block">
                           <div className="font-medium">Next Rule</div>
                           <div className="text-sm text-gray-600">Rule {nextRule.ruleNumber} - {nextRule.title}</div>
                         </div>
@@ -332,7 +334,7 @@ export default function RulePage() {
                       </Button>
                     </Link>
                   ) : (
-                    <div />
+                    <div className="w-full sm:w-auto" />
                   )}
                 </div>
               </CardContent>
