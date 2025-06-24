@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Maritime theme colors */
+  --maritime-50: hsl(207, 100%, 96%);
+  --maritime-100: hsl(207, 96%, 89%);
+  --maritime-200: hsl(207, 94%, 82%);
+  --maritime-300: hsl(207, 91%, 73%);
+  --maritime-400: hsl(207, 88%, 66%);
+  --maritime-500: hsl(207, 90%, 54%);
+  --maritime-600: hsl(207, 89%, 48%);
+  --maritime-700: hsl(207, 100%, 29%);
+  --maritime-800: hsl(207, 100%, 23%);
+  --maritime-900: hsl(207, 100%, 15%);
+
+  --ocean-50: hsl(199, 100%, 95%);
+  --ocean-100: hsl(199, 100%, 85%);
+  --ocean-200: hsl(199, 100%, 78%);
+  --ocean-300: hsl(199, 100%, 70%);
+  --ocean-400: hsl(199, 100%, 64%);
+  --ocean-500: hsl(199, 100%, 43%);
+  --ocean-600: hsl(199, 100%, 37%);
+  --ocean-700: hsl(199, 100%, 30%);
+  --ocean-800: hsl(199, 100%, 24%);
+  --ocean-900: hsl(199, 100%, 17%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .maritime-gradient {
+    background: linear-gradient(135deg, hsl(var(--maritime-500)) 0%, hsl(var(--ocean-500)) 100%);
+  }
+  
+  .maritime-text {
+    color: hsl(var(--maritime-600));
+  }
+  
+  .ocean-text {
+    color: hsl(var(--ocean-600));
+  }
+}
