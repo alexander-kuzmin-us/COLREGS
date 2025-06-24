@@ -99,18 +99,21 @@ export default function RulePage() {
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <Ship className="text-white" size={20} />
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-lg flex items-center justify-center">
+                <Ship className="text-white" size={16} />
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">COLREGS Academy</h1>
+              <div className="hidden sm:block">
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900">COLREGS Academy</h1>
                 <p className="text-xs text-gray-500">Maritime Safety Education</p>
+              </div>
+              <div className="sm:hidden">
+                <h1 className="text-lg font-bold text-gray-900">COLREGS</h1>
               </div>
             </div>
 
-            <div className="flex-1 max-w-2xl mx-8">
-              <div className="relative">
+            <div className="hidden md:flex flex-1 max-w-2xl mx-8">
+              <div className="relative w-full">
                 <Input
                   type="text"
                   placeholder="Search regulations, rules, or terms..."
@@ -120,14 +123,26 @@ export default function RulePage() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="hidden sm:block text-right">
                 <div className="text-sm font-medium text-gray-700">Progress</div>
                 <div className="text-xs text-gray-500">{completedRules} of {totalRules} rules</div>
               </div>
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                <span className="text-primary font-semibold">{Math.round(overallProgress)}%</span>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                <span className="text-primary font-semibold text-sm sm:text-base">{Math.round(overallProgress)}%</span>
               </div>
+            </div>
+          </div>
+
+          {/* Mobile search bar */}
+          <div className="md:hidden pb-4">
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder="Search regulations..."
+                className="pl-10"
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
             </div>
           </div>
         </div>
@@ -148,27 +163,29 @@ export default function RulePage() {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex gap-8">
-          {/* Sidebar */}
-          <Sidebar currentRuleId={rule.id} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          {/* Sidebar - Hidden on mobile, shown as collapsible */}
+          <div className="lg:block">
+            <Sidebar currentRuleId={rule.id} />
+          </div>
 
           {/* Main Content */}
-          <main className="flex-1">
+          <main className="flex-1 min-w-0">
             {/* Rule Header */}
-            <Card className="mb-6">
-              <CardContent className="p-8">
-                <div className="flex items-start justify-between">
+            <Card className="mb-4 sm:mb-6">
+              <CardContent className="p-4 sm:p-6 lg:p-8">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                        <Eye className="text-white" size={20} />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-lg flex items-center justify-center">
+                        <Eye className="text-white" size={16} />
                       </div>
-                      <div>
-                        <h1 className="text-3xl font-bold text-gray-900">
+                      <div className="min-w-0 flex-1">
+                        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 break-words">
                           Rule {rule.ruleNumber} - {rule.title}
                         </h1>
-                        <p className="text-lg text-gray-600">Part {rule.part}: {rule.partTitle}</p>
+                        <p className="text-sm sm:text-base lg:text-lg text-gray-600">Part {rule.part}: {rule.partTitle}</p>
                       </div>
                     </div>
                     
@@ -180,9 +197,9 @@ export default function RulePage() {
                     </Alert>
                   </div>
                   
-                  <div className="ml-8 text-center">
-                    <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-2">
-                      <span className="text-2xl font-bold text-primary">
+                  <div className="lg:ml-8 text-center">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-full flex items-center justify-center mb-2 mx-auto lg:mx-0">
+                      <span className="text-lg sm:text-2xl font-bold text-primary">
                         {currentRuleIndex + 1}/{totalRules}
                       </span>
                     </div>
@@ -193,27 +210,27 @@ export default function RulePage() {
             </Card>
 
             {/* Rule Content */}
-            <Card className="mb-6">
-              <CardContent className="p-8">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Official Regulation Text</h2>
+            <Card className="mb-4 sm:mb-6">
+              <CardContent className="p-4 sm:p-6 lg:p-8">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Official Regulation Text</h2>
                 
-                <div className="bg-gray-50 border-l-4 border-primary p-6 mb-6 font-mono text-sm leading-relaxed">
+                <div className="bg-gray-50 border-l-4 border-primary p-4 sm:p-6 mb-4 sm:mb-6 font-mono text-xs sm:text-sm leading-relaxed">
                   <p className="text-gray-800">"{rule.officialText}"</p>
                 </div>
 
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Plain English Explanation</h3>
-                <div className="prose prose-lg text-gray-700 mb-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Plain English Explanation</h3>
+                <div className="prose prose-sm sm:prose-lg text-gray-700 mb-4 sm:mb-6">
                   <p>{rule.plainEnglish}</p>
                 </div>
 
                 {/* Key Points */}
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6">
                     <div className="flex items-start space-x-3">
-                      <CheckCircle className="text-green-600 mt-1" size={20} />
+                      <CheckCircle className="text-green-600 mt-1" size={18} />
                       <div>
-                        <h4 className="font-semibold text-green-900 mb-2">Key Points</h4>
-                        <ul className="text-green-800 space-y-1 text-sm">
+                        <h4 className="font-semibold text-green-900 mb-2 text-sm sm:text-base">Key Points</h4>
+                        <ul className="text-green-800 space-y-1 text-xs sm:text-sm">
                           {rule.keyPoints.map((point, index) => (
                             <li key={index}>• {point}</li>
                           ))}
@@ -222,12 +239,12 @@ export default function RulePage() {
                     </div>
                   </div>
 
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
                     <div className="flex items-start space-x-3">
-                      <AlertTriangle className="text-red-600 mt-1" size={20} />
+                      <AlertTriangle className="text-red-600 mt-1" size={18} />
                       <div>
-                        <h4 className="font-semibold text-red-900 mb-2">Common Violations</h4>
-                        <ul className="text-red-800 space-y-1 text-sm">
+                        <h4 className="font-semibold text-red-900 mb-2 text-sm sm:text-base">Common Violations</h4>
+                        <ul className="text-red-800 space-y-1 text-xs sm:text-sm">
                           {rule.commonViolations.map((violation, index) => (
                             <li key={index}>• {violation}</li>
                           ))}
@@ -246,26 +263,26 @@ export default function RulePage() {
 
             {/* Related Rules */}
             {rule.relatedRules.length > 0 && (
-              <Card className="mb-6">
+              <Card className="mb-4 sm:mb-6">
                 <CardHeader>
-                  <CardTitle>Related Rules</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">Related Rules</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {rule.relatedRules.map((relatedRuleNumber) => {
                       const relatedRule = allRules?.find(r => r.ruleNumber === relatedRuleNumber);
                       if (!relatedRule) return null;
                       
                       return (
                         <Link key={relatedRuleNumber} href={`/rule/${relatedRuleNumber}`}>
-                          <div className="block p-4 border border-gray-200 rounded-lg hover:border-primary/30 hover:shadow-md transition-all">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                                <span className="text-primary font-bold text-sm">{relatedRuleNumber}</span>
+                          <div className="block p-3 sm:p-4 border border-gray-200 rounded-lg hover:border-primary/30 hover:shadow-md transition-all">
+                            <div className="flex items-center space-x-2 sm:space-x-3">
+                              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <span className="text-primary font-bold text-xs sm:text-sm">{relatedRuleNumber}</span>
                               </div>
-                              <div>
-                                <h3 className="font-medium text-gray-900">Rule {relatedRuleNumber} - {relatedRule.title}</h3>
-                                <p className="text-sm text-gray-600">{relatedRule.plainEnglish.slice(0, 60)}...</p>
+                              <div className="min-w-0 flex-1">
+                                <h3 className="font-medium text-gray-900 text-sm sm:text-base truncate">Rule {relatedRuleNumber} - {relatedRule.title}</h3>
+                                <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">{relatedRule.plainEnglish.slice(0, 50)}...</p>
                               </div>
                             </div>
                           </div>
