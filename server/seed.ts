@@ -1,5 +1,33 @@
 import { db } from "./db";
 import { rules, quizzes } from "@shared/schema";
+import { completeColregsRules, completeColregsQuizzes } from "./complete-colregs-data";
+
+// Clear existing data and reseed with complete COLREGS
+export async function clearAndReseed() {
+  console.log("Clearing existing data...");
+  await db.delete(quizzes);
+  await db.delete(rules);
+  
+  console.log("Inserting complete COLREGS rules...");
+  const insertedRules = await db.insert(rules).values(completeColregsRules).returning();
+  
+  // Map quiz rule references to actual rule IDs
+  const ruleIdMap = new Map<number, number>();
+  insertedRules.forEach((rule, index) => {
+    ruleIdMap.set(index + 1, rule.id);
+  });
+  
+  // Update quiz rule IDs to match inserted rules
+  const updatedQuizzes = completeColregsQuizzes.map(quiz => ({
+    ...quiz,
+    ruleId: ruleIdMap.get(quiz.ruleId) || quiz.ruleId
+  }));
+  
+  console.log("Inserting complete COLREGS quizzes...");
+  await db.insert(quizzes).values(updatedQuizzes).returning();
+  
+  console.log(`Complete reseed finished! Inserted ${insertedRules.length} rules and ${updatedQuizzes.length} quizzes`);
+}
 
 const initialRules = [
   {

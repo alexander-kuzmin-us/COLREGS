@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -17,11 +17,12 @@ export const rules = pgTable("rules", {
 
 export const quizzes = pgTable("quizzes", {
   id: serial("id").primaryKey(),
-  ruleId: integer("rule_id").notNull(),
+  ruleId: integer("rule_id").notNull().references(() => rules.id),
   question: text("question").notNull(),
   options: text("options").array().notNull(),
   correctAnswer: integer("correct_answer").notNull(),
   explanation: text("explanation").notNull(),
+  difficulty: text("difficulty", { enum: ["easy", "medium", "hard"] }).notNull().default("medium")
 });
 
 export const userProgress = pgTable("user_progress", {
@@ -39,6 +40,9 @@ export const insertRuleSchema = createInsertSchema(rules).omit({
 
 export const insertQuizSchema = createInsertSchema(quizzes).omit({
   id: true,
+  ruleId: true,
+}).extend({
+  ruleId: z.number(),
 });
 
 export const insertProgressSchema = createInsertSchema(userProgress).omit({

@@ -117,6 +117,13 @@ Changelog:
   - Integrated FAQ navigation in header
   - Included quick start guide and contact information
   - Covered platform usage, content, and technical support
+- July 4, 2025. Implemented complete COLREGS structure with functional quizzes:
+  - Updated Rule 1 and 2 with official subparts (a), (b), (c), (d), (e) from 1972 Convention
+  - Created comprehensive database with 10 COLREGS rules and 15 interactive quizzes
+  - Added difficulty levels (easy, medium, hard) with visual indicators
+  - Implemented proper subpart formatting with RuleTextDisplay component
+  - Enhanced quiz functionality with immediate feedback and progress tracking
+  - Added quiz API endpoints with comprehensive answer validation
 
 ## User Preferences
 

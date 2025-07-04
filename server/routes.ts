@@ -102,7 +102,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         correct: isCorrect,
         correctAnswer: quiz.correctAnswer,
         explanation: quiz.explanation,
-        score
+        score,
+        difficulty: quiz.difficulty || 'medium'
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to submit quiz answer" });

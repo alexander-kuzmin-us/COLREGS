@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle, XCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { CheckCircle, XCircle, ChevronLeft, ChevronRight, Award, Target, BookOpen } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { QuizSchemaMarkup } from "@/components/seo/schema-markup";
 import type { Quiz, Rule } from "@shared/schema";
@@ -20,7 +20,26 @@ interface QuizResult {
   correctAnswer: number;
   explanation: string;
   score: number;
+  difficulty: string;
 }
+
+const getDifficultyColor = (difficulty: string) => {
+  switch (difficulty) {
+    case 'easy': return 'bg-green-100 text-green-800 border-green-200';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'hard': return 'bg-red-100 text-red-800 border-red-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+  }
+};
+
+const getDifficultyIcon = (difficulty: string) => {
+  switch (difficulty) {
+    case 'easy': return <BookOpen size={14} />;
+    case 'medium': return <Target size={14} />;
+    case 'hard': return <Award size={14} />;
+    default: return <BookOpen size={14} />;
+  }
+};
 
 export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps) {
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
