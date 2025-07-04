@@ -24,6 +24,7 @@ import { useProgress } from "@/hooks/use-progress";
 import Sidebar from "@/components/sidebar";
 import QuizSection from "@/components/quiz";
 import ProgressModal from "@/components/progress-modal";
+import RuleTextDisplay from "@/components/rule-text-display";
 import { RuleSchemaMarkup } from "@/components/seo/schema-markup";
 import { useState } from "react";
 
@@ -250,13 +251,20 @@ export default function RulePage() {
               <CardContent className="p-4 sm:p-6 lg:p-8">
                 <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Official Regulation Text</h2>
                 
-                <div className="bg-gray-50 border-l-4 border-primary p-4 sm:p-6 mb-4 sm:mb-6 font-mono text-xs sm:text-sm leading-relaxed">
-                  <p className="text-gray-800">"{rule.officialText}"</p>
+                <div className="mb-4 sm:mb-6">
+                  <RuleTextDisplay 
+                    title="Official Text" 
+                    text={rule.officialText} 
+                    isOfficial={true} 
+                  />
                 </div>
 
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Plain English Explanation</h3>
-                <div className="prose prose-sm sm:prose-lg text-gray-700 mb-4 sm:mb-6">
-                  <p>{rule.plainEnglish}</p>
+                <div className="mb-4 sm:mb-6">
+                  <RuleTextDisplay 
+                    title="Plain English Explanation" 
+                    text={rule.plainEnglish} 
+                    isOfficial={false} 
+                  />
                 </div>
 
                 {/* Key Points */}
