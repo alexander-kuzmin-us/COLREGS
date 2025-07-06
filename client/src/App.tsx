@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ComprehensiveSchemaMarkup } from "@/components/schema-markup";
 import Home from "@/pages/home";
 import RulePage from "@/pages/rule";
 import FAQ from "@/pages/faq";
@@ -30,6 +31,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <div className="min-h-screen bg-gray-50">
+            <ComprehensiveSchemaMarkup />
             <Toaster />
             <Router />
           </div>
