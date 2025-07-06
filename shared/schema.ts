@@ -114,3 +114,29 @@ export type Assessment = typeof assessments.$inferSelect;
 
 export type InsertAssessmentResult = z.infer<typeof insertAssessmentResultSchema>;
 export type AssessmentResult = typeof assessmentResults.$inferSelect;
+
+// Achievements table for badge system
+export const achievements = pgTable("achievements", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().default("default"),
+  badgeType: text("badge_type").notNull(), // e.g., "first_quiz", "perfect_score", "part_master"
+  badgeTitle: text("badge_title").notNull(),
+  badgeDescription: text("badge_description").notNull(),
+  iconName: text("icon_name").notNull(), // icon identifier for maritime badges
+  ruleId: integer("rule_id").references(() => rules.id), // optional, for rule-specific badges
+  partName: text("part_name"), // optional, for part-specific badges
+  earnedAt: timestamp("earned_at").notNull().defaultNow(),
+  shared: boolean("shared").notNull().default(false),
+  sharedAt: timestamp("shared_at"),
+});
+
+export const insertAchievementSchema = createInsertSchema(achievements, {
+  earnedAt: z.date().optional(),
+  sharedAt: z.date().optional(),
+}).omit({
+  id: true,
+  earnedAt: true,
+});
+
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
+export type Achievement = typeof achievements.$inferSelect;

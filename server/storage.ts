@@ -4,6 +4,7 @@ import {
   userProgress,
   assessments,
   assessmentResults,
+  achievements,
   users,
   type Rule, 
   type Quiz, 
@@ -15,6 +16,8 @@ import {
   type InsertAssessment,
   type AssessmentResult,
   type InsertAssessmentResult,
+  type Achievement,
+  type InsertAchievement,
   type User,
   type InsertUser
 } from "@shared/schema";
@@ -48,6 +51,12 @@ export interface IStorage {
   createAssessment(assessment: InsertAssessment): Promise<Assessment>;
   createAssessmentResult(result: InsertAssessmentResult): Promise<AssessmentResult>;
   getUserAssessments(userId: string): Promise<Assessment[]>;
+
+  // Achievements
+  getUserAchievements(userId: string): Promise<Achievement[]>;
+  createAchievement(achievement: InsertAchievement): Promise<Achievement>;
+  updateAchievementShared(achievementId: number, shared: boolean): Promise<Achievement>;
+  checkAndAwardAchievements(userId: string, quizScore?: number, ruleId?: number, partName?: string): Promise<Achievement[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -390,6 +399,97 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(assessments)
       .where(eq(assessments.userId, userId));
+  }
+
+  async getUserAchievements(userId: string): Promise<Achievement[]> {
+    return await db
+      .select()
+      .from(achievements)
+      .where(eq(achievements.userId, userId))
+      .orderBy(achievements.earnedAt);
+  }
+
+  async createAchievement(achievement: InsertAchievement): Promise<Achievement> {
+    const [newAchievement] = await db
+      .insert(achievements)
+      .values(achievement)
+      .returning();
+    return newAchievement;
+  }
+
+  async updateAchievementShared(achievementId: number, shared: boolean): Promise<Achievement> {
+    const [updated] = await db
+      .update(achievements)
+      .set({ 
+        shared, 
+        sharedAt: shared ? new Date() : null 
+      })
+      .where(eq(achievements.id, achievementId))
+      .returning();
+    return updated;
+  }
+
+  async checkAndAwardAchievements(userId: string, quizScore?: number, ruleId?: number, partName?: string): Promise<Achievement[]> {
+    const newAchievements: Achievement[] = [];
+
+    // Check for First Quiz achievement
+    const existingAchievements = await this.getUserAchievements(userId);
+    const hasFirstQuiz = existingAchievements.some(a => a.badgeType === 'first_quiz');
+    
+    if (!hasFirstQuiz && quizScore !== undefined) {
+      const firstQuizBadge = await this.createAchievement({
+        userId,
+        badgeType: 'first_quiz',
+        badgeTitle: 'First Mate',
+        badgeDescription: 'Completed your first quiz',
+        iconName: 'anchor',
+        ruleId
+      });
+      newAchievements.push(firstQuizBadge);
+    }
+
+    // Check for Perfect Score achievement
+    if (quizScore === 100) {
+      const perfectScoreBadge = await this.createAchievement({
+        userId,
+        badgeType: 'perfect_score',
+        badgeTitle: 'Navigation Master',
+        badgeDescription: 'Achieved a perfect score on a quiz',
+        iconName: 'compass',
+        ruleId
+      });
+      newAchievements.push(perfectScoreBadge);
+    }
+
+    // Check for Part Master achievement
+    if (partName) {
+      const userProgress = await this.getUserProgress(userId);
+      const allRules = await this.getAllRules();
+      const partRules = allRules.filter(rule => rule.part === partName);
+      const completedPartRules = userProgress.filter(progress => 
+        progress.completed && partRules.some(rule => rule.id === progress.ruleId)
+      );
+
+      if (completedPartRules.length === partRules.length) {
+        const hasPartMaster = existingAchievements.some(a => 
+          a.badgeType === 'part_master' && a.partName === partName
+        );
+        
+        if (!hasPartMaster) {
+          const partMasterBadge = await this.createAchievement({
+            userId,
+            badgeType: 'part_master',
+            badgeTitle: `Part ${partName} Captain`,
+            badgeDescription: `Mastered all rules in Part ${partName}`,
+            iconName: 'ship-wheel',
+            partName
+          });
+          newAchievements.push(partMasterBadge);
+        }
+      }
+    }
+
+    return newAchievements;
   }
 }
 

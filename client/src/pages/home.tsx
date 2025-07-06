@@ -102,6 +102,12 @@ export default function Home() {
 
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/achievements">
+                  <Trophy className="mr-1" size={14} />
+                  Achievements
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
                 <Link href="/faq">FAQ</Link>
               </Button>
               {isAuthenticated && (

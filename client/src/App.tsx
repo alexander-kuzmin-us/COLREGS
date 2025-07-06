@@ -8,6 +8,7 @@ import Home from "@/pages/home";
 import RulePage from "@/pages/rule";
 import FAQ from "@/pages/faq";
 import AssessmentPage from "@/pages/assessment-simple";
+import AchievementsPage from "@/pages/achievements";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/rule/:ruleNumber" component={RulePage} />
       <Route path="/faq" component={FAQ} />
       <Route path="/assessment" component={AssessmentPage} />
+      <Route path="/achievements" component={AchievementsPage} />
       <Route component={NotFound} />
     </Switch>
   );

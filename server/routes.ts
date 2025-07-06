@@ -101,12 +101,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ruleId: quiz.ruleId
       });
 
+      // Check for achievements
+      const rule = await storage.getRuleById(quiz.ruleId);
+      const newAchievements = await storage.checkAndAwardAchievements(
+        userId, 
+        score, 
+        quiz.ruleId, 
+        rule?.part
+      );
+
       res.json({
         correct: isCorrect,
         correctAnswer: quiz.correctAnswer,
         explanation: quiz.explanation,
         score,
-        difficulty: quiz.difficulty || 'medium'
+        difficulty: quiz.difficulty || 'medium',
+        achievements: newAchievements
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to submit quiz answer" });
@@ -255,6 +265,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(report);
     } catch (error) {
       res.status(500).json({ message: "Failed to submit assessment" });
+    }
+  });
+
+  // Achievement routes
+  app.get("/api/achievements/:userId", async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.params;
+      const achievements = await storage.getUserAchievements(userId);
+      res.json(achievements);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch achievements" });
+    }
+  });
+
+  app.post("/api/achievements/:achievementId/share", async (req: Request, res: Response) => {
+    try {
+      const { achievementId } = req.params;
+      const { shared } = req.body;
+      
+      const updated = await storage.updateAchievementShared(
+        parseInt(achievementId), 
+        shared === true
+      );
+      
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update achievement sharing" });
     }
   });
 

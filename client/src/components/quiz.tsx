@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle, XCircle, ChevronLeft, ChevronRight, Award, Target, BookOpen } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { QuizSchemaMarkup } from "@/components/seo/schema-markup";
+import AchievementNotification from "@/components/achievement-notification";
 import type { Quiz, Rule } from "@shared/schema";
 
 interface QuizSectionProps {
@@ -21,6 +22,15 @@ interface QuizResult {
   explanation: string;
   score: number;
   difficulty: string;
+  achievements?: Achievement[];
+}
+
+interface Achievement {
+  id: number;
+  badgeType: string;
+  badgeTitle: string;
+  badgeDescription: string;
+  iconName: string;
 }
 
 const getDifficultyColor = (difficulty: string) => {
@@ -45,6 +55,7 @@ export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps)
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [quizResults, setQuizResults] = useState<Record<number, QuizResult>>({});
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const queryClient = useQueryClient();
 
   const currentQuiz = quizzes[currentQuizIndex];
@@ -64,6 +75,12 @@ export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps)
         ...prev,
         [variables.quizId]: data
       }));
+      
+      // Handle achievements
+      if (data.achievements && data.achievements.length > 0) {
+        setNewAchievements(data.achievements);
+      }
+      
       // Invalidate progress to update completion status
       queryClient.invalidateQueries({ queryKey: ["/api/progress/default"] });
     }
@@ -105,7 +122,12 @@ export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps)
   if (!currentQuiz) return null;
 
   return (
-    <Card className="mb-4 sm:mb-6">
+    <>
+      <AchievementNotification 
+        achievements={newAchievements}
+        onAcknowledge={() => setNewAchievements([])}
+      />
+      <Card className="mb-4 sm:mb-6">
       {rule && (
         <QuizSchemaMarkup 
           rule={rule}
@@ -243,5 +265,6 @@ export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps)
         </div>
       </CardContent>
     </Card>
+    </>
   );
 }
