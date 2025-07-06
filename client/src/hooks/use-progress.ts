@@ -2,7 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { Progress } from "@shared/schema";
 
-export function useProgress(userId: string = "default") {
+import { useAuth } from "./useAuth";
+
+export function useProgress() {
+  const { user } = useAuth();
+  const userId = user?.id || "default";
   const queryClient = useQueryClient();
   
   const { data: progressData, isLoading } = useQuery<Progress[]>({

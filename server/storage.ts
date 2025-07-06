@@ -4,6 +4,7 @@ import {
   userProgress,
   assessments,
   assessmentResults,
+  users,
   type Rule, 
   type Quiz, 
   type Progress, 
@@ -13,12 +14,18 @@ import {
   type Assessment,
   type InsertAssessment,
   type AssessmentResult,
-  type InsertAssessmentResult
+  type InsertAssessmentResult,
+  type User,
+  type InsertUser
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
+  // Users
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: InsertUser): Promise<User>;
+
   // Rules
   getAllRules(): Promise<Rule[]>;
   getRuleById(id: number): Promise<Rule | undefined>;
@@ -44,6 +51,21 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
+  // User operations for in-memory storage
+  async getUser(id: string): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async upsertUser(userData: InsertUser): Promise<User> {
+    const user: User = {
+      ...userData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.users.set(user.id, user);
+    return user;
+  }
+
   // Add missing methods for assessments
   async getAllQuizzes(): Promise<Quiz[]> {
     return Array.from(this.quizzes.values());
@@ -54,7 +76,8 @@ export class MemStorage implements IStorage {
     const newAssessment: Assessment = { 
       ...assessment, 
       id,
-      completedAt: new Date()
+      completedAt: new Date(),
+      passingGrade: assessment.passingGrade || false
     };
     // Store in memory if needed
     return newAssessment;
@@ -71,6 +94,7 @@ export class MemStorage implements IStorage {
     // Return empty array for in-memory implementation
     return [];
   }
+  private users: Map<string, User>;
   private rules: Map<number, Rule>;
   private quizzes: Map<number, Quiz>;
   private progress: Map<string, Progress>;
@@ -79,6 +103,7 @@ export class MemStorage implements IStorage {
   private currentProgressId: number;
 
   constructor() {
+    this.users = new Map();
     this.rules = new Map();
     this.quizzes = new Map();
     this.progress = new Map();
@@ -241,6 +266,28 @@ export class MemStorage implements IStorage {
 
 // Database Storage implementation
 export class DatabaseStorage implements IStorage {
+  // User operations
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async upsertUser(userData: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          email: userData.email,
+          name: userData.name,
+          picture: userData.picture,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
+  }
   async getAllRules(): Promise<Rule[]> {
     const allRules = await db.select().from(rules).orderBy(rules.part, rules.ruleNumber);
     return allRules;

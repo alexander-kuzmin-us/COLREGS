@@ -9,6 +9,8 @@ import { Ship, Search, BookOpen, Award, Clock, Target } from "lucide-react";
 import { Link } from "wouter";
 import type { Rule } from "@shared/schema";
 import { useProgress } from "@/hooks/use-progress";
+import { useAuth } from "@/hooks/useAuth";
+import AuthButton from "@/components/auth-button";
 import { HomepageSchemaMarkup } from "@/components/seo/schema-markup";
 
 export default function Home() {
@@ -16,6 +18,7 @@ export default function Home() {
     queryKey: ["/api/rules"],
   });
 
+  const { user, isAuthenticated } = useAuth();
   const { progressData, overallProgress } = useProgress();
 
   if (isLoading) {
@@ -101,13 +104,18 @@ export default function Home() {
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
                 <Link href="/faq">FAQ</Link>
               </Button>
-              <div className="hidden sm:block text-right">
-                <div className="text-sm font-medium text-gray-700">Progress</div>
-                <div className="text-xs text-gray-500">{completedRules} of {totalRules} rules</div>
-              </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                <span className="text-primary font-semibold text-sm sm:text-base">{Math.round(overallProgress)}%</span>
-              </div>
+              {isAuthenticated && (
+                <div className="hidden sm:block text-right">
+                  <div className="text-sm font-medium text-gray-700">Progress</div>
+                  <div className="text-xs text-gray-500">{completedRules} of {totalRules} rules</div>
+                </div>
+              )}
+              {isAuthenticated && (
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="text-primary font-semibold text-sm sm:text-base">{Math.round(overallProgress)}%</span>
+                </div>
+              )}
+              <AuthButton />
             </div>
           </div>
 

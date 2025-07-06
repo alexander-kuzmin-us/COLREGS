@@ -58,10 +58,18 @@ export type Quiz = typeof quizzes.$inferSelect;
 export type InsertProgress = z.infer<typeof insertProgressSchema>;
 export type Progress = typeof userProgress.$inferSelect;
 
-export type User = {
-  id: string;
-  username: string;
-};
+// User table for authentication
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey(), // Google ID
+  email: varchar("email").notNull().unique(),
+  name: varchar("name").notNull(),
+  picture: varchar("picture"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type User = typeof users.$inferSelect;
+export type InsertUser = typeof users.$inferInsert;
 
 // Assessment tables
 export const assessments = pgTable("assessments", {
