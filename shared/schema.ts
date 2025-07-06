@@ -62,3 +62,47 @@ export type User = {
   id: string;
   username: string;
 };
+
+// Assessment tables
+export const assessments = pgTable("assessments", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  totalQuestions: integer("total_questions").notNull(),
+  correctAnswers: integer("correct_answers").notNull(),
+  score: integer("score").notNull(),
+  timeSpent: integer("time_spent").notNull(), // seconds
+  timeLimit: integer("time_limit").notNull(), // seconds
+  passingGrade: boolean("passing_grade").notNull().default(false),
+  parts: text("parts").array().notNull(),
+  difficulty: text("difficulty").array().notNull(),
+  completedAt: timestamp("completed_at").defaultNow().notNull(),
+});
+
+export const assessmentResults = pgTable("assessment_results", {
+  id: serial("id").primaryKey(),
+  assessmentId: integer("assessment_id").references(() => assessments.id).notNull(),
+  questionId: integer("question_id").references(() => quizzes.id).notNull(),
+  selectedAnswer: integer("selected_answer").notNull(),
+  correct: boolean("correct").notNull(),
+  timeSpent: integer("time_spent").notNull(), // seconds
+});
+
+export const insertAssessmentSchema = createInsertSchema(assessments, {
+  id: z.number().optional(),
+  completedAt: z.date().optional(),
+}).omit({
+  id: true,
+  completedAt: true,
+});
+
+export const insertAssessmentResultSchema = createInsertSchema(assessmentResults, {
+  id: z.number().optional(),
+}).omit({
+  id: true,
+});
+
+export type InsertAssessment = z.infer<typeof insertAssessmentSchema>;
+export type Assessment = typeof assessments.$inferSelect;
+
+export type InsertAssessmentResult = z.infer<typeof insertAssessmentResultSchema>;
+export type AssessmentResult = typeof assessmentResults.$inferSelect;

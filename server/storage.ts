@@ -1,13 +1,19 @@
 import { 
   rules, 
   quizzes, 
-  userProgress, 
+  userProgress,
+  assessments,
+  assessmentResults,
   type Rule, 
   type Quiz, 
   type Progress, 
   type InsertRule, 
   type InsertQuiz, 
-  type InsertProgress 
+  type InsertProgress,
+  type Assessment,
+  type InsertAssessment,
+  type AssessmentResult,
+  type InsertAssessmentResult
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
@@ -29,9 +35,42 @@ export interface IStorage {
   getProgressByUserAndRule(userId: string, ruleId: number): Promise<Progress | undefined>;
   updateProgress(userId: string, ruleId: number, progress: Partial<InsertProgress>): Promise<Progress>;
   createProgress(progress: InsertProgress): Promise<Progress>;
+
+  // Assessments
+  getAllQuizzes(): Promise<Quiz[]>;
+  createAssessment(assessment: InsertAssessment): Promise<Assessment>;
+  createAssessmentResult(result: InsertAssessmentResult): Promise<AssessmentResult>;
+  getUserAssessments(userId: string): Promise<Assessment[]>;
 }
 
 export class MemStorage implements IStorage {
+  // Add missing methods for assessments
+  async getAllQuizzes(): Promise<Quiz[]> {
+    return Array.from(this.quizzes.values());
+  }
+
+  async createAssessment(assessment: InsertAssessment): Promise<Assessment> {
+    const id = this.currentProgressId++;
+    const newAssessment: Assessment = { 
+      ...assessment, 
+      id,
+      completedAt: new Date()
+    };
+    // Store in memory if needed
+    return newAssessment;
+  }
+
+  async createAssessmentResult(result: InsertAssessmentResult): Promise<AssessmentResult> {
+    const id = this.currentProgressId++;
+    const newResult: AssessmentResult = { ...result, id };
+    // Store in memory if needed
+    return newResult;
+  }
+
+  async getUserAssessments(userId: string): Promise<Assessment[]> {
+    // Return empty array for in-memory implementation
+    return [];
+  }
   private rules: Map<number, Rule>;
   private quizzes: Map<number, Quiz>;
   private progress: Map<string, Progress>;
@@ -277,6 +316,33 @@ export class DatabaseStorage implements IStorage {
       .values(insertProgress)
       .returning();
     return progress;
+  }
+
+  async getAllQuizzes(): Promise<Quiz[]> {
+    return await db.select().from(quizzes);
+  }
+
+  async createAssessment(insertAssessment: InsertAssessment): Promise<Assessment> {
+    const [assessment] = await db
+      .insert(assessments)
+      .values(insertAssessment)
+      .returning();
+    return assessment;
+  }
+
+  async createAssessmentResult(insertResult: InsertAssessmentResult): Promise<AssessmentResult> {
+    const [result] = await db
+      .insert(assessmentResults)
+      .values(insertResult)
+      .returning();
+    return result;
+  }
+
+  async getUserAssessments(userId: string): Promise<Assessment[]> {
+    return await db
+      .select()
+      .from(assessments)
+      .where(eq(assessments.userId, userId));
   }
 }
 
