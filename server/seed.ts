@@ -1,6 +1,7 @@
 import { db } from "./db";
 import { rules, quizzes } from "@shared/schema";
 import { completeColregsRules, completeColregsQuizzes } from "./complete-colregs-data";
+import { completeColregsRules as additionalRules, additionalQuizzes } from "./complete-colregs-full";
 
 // Clear existing data and reseed with complete COLREGS
 export async function clearAndReseed() {
