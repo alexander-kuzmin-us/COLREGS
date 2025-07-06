@@ -1,7 +1,9 @@
 import { useAuth } from "@/hooks/useAuth";
 import AchievementDisplay from "@/components/achievements";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Star, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Trophy, Star, Target, Home, ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
 
 export default function AchievementsPage() {
   const { user } = useAuth();
@@ -10,6 +12,22 @@ export default function AchievementsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
+        {/* Navigation Header */}
+        <div className="flex items-center justify-between mb-6">
+          <Button variant="outline" asChild className="flex items-center gap-2">
+            <Link href="/">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Link>
+          </Button>
+          <Button variant="ghost" asChild className="flex items-center gap-2">
+            <Link href="/">
+              <Home className="h-4 w-4" />
+              Home
+            </Link>
+          </Button>
+        </div>
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Maritime Achievements
