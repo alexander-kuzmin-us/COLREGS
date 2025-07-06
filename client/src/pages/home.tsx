@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Ship, Search, BookOpen, Award, Clock, Target } from "lucide-react";
+import { Ship, Search, BookOpen, Award, Clock, Target, Trophy } from "lucide-react";
 import { Link } from "wouter";
 import type { Rule } from "@shared/schema";
 import { useProgress } from "@/hooks/use-progress";

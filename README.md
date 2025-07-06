@@ -16,6 +16,7 @@ COLREGS Academy is a comprehensive maritime safety education platform that teach
 - **📊 Progress Tracking**: User progress persistence with completion statistics
 - **🏆 Assessment System**: Timed assessments with performance analytics
 - **🎓 Certification**: Downloadable certificates for passing grades (70%+)
+- **🏅 Achievement System**: Maritime-themed badges with social sharing capabilities
 - **🔐 User Authentication**: Google OAuth integration for progress tracking
 - **📱 Responsive Design**: Mobile-first design with collapsible navigation
 - **🔍 SEO Optimized**: Schema.org markup and comprehensive meta tags
@@ -147,6 +148,34 @@ COLREGS Academy supports Google OAuth for user authentication and progress track
 - **Secure Sessions**: Express sessions with PostgreSQL store
 - **Guest Mode**: App functions without authentication using default user
 
+## 🏅 Achievement System
+
+COLREGS Academy features a comprehensive achievement system with maritime-themed badges to motivate and track user progress.
+
+### Available Achievements
+
+- **🧭 Navigator's Compass**: Earn by completing your first quiz
+- **⚓ Anchor Badge**: Complete all quizzes in any Part
+- **🗼 Lighthouse Keeper**: Achieve perfect scores on multiple quizzes
+- **🚢 Ship Master**: Complete all rules in multiple Parts
+- **👑 Fleet Commander**: Master all COLREGS parts with high scores
+
+### Achievement Features
+
+- **Real-time Notifications**: Instant badge notifications upon earning achievements
+- **Social Sharing**: Share achievements with colleagues and instructors
+- **Progress Tracking**: Visual progress indicators for each achievement
+- **Maritime Theme**: Authentic nautical symbols and terminology
+- **Persistent Storage**: Achievements saved to user profiles
+
+### How to Earn Achievements
+
+1. **Complete Quizzes**: Take and pass quizzes to unlock basic achievements
+2. **Achieve High Scores**: Score 80% or higher to unlock advanced badges
+3. **Master Sections**: Complete entire Parts to earn part-specific achievements
+4. **Consistent Performance**: Maintain high scores across multiple attempts
+5. **Full Coverage**: Complete all rules to earn the ultimate Fleet Commander badge
+
 ## 📖 Usage Guide
 
 ### For Students
@@ -155,8 +184,9 @@ COLREGS Academy supports Google OAuth for user authentication and progress track
 2. **Interactive Content**: Read official text and plain English explanations
 3. **Take Quizzes**: Test your knowledge with multiple-choice questions
 4. **Track Progress**: Monitor completion status and quiz scores
-5. **Assessment**: Take comprehensive assessments covering multiple rules
-6. **Certification**: Download certificates upon successful completion
+5. **Earn Achievements**: Unlock maritime-themed badges as you progress
+6. **Assessment**: Take comprehensive assessments covering multiple rules
+7. **Certification**: Download certificates upon successful completion
 
 ### For Educators
 
