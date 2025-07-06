@@ -1,0 +1,363 @@
+# COLREGS Academy
+
+An advanced educational web application designed to teach maritime collision prevention regulations (COLREGS) through interactive, engaging learning experiences.
+
+![COLREGS Academy](./generated-icon.png)
+
+## 🚢 Overview
+
+COLREGS Academy is a comprehensive maritime safety education platform that teaches the International Regulations for Preventing Collisions at Sea (1972). The application provides interactive learning modules, comprehensive quizzes, progress tracking, and certification for all 41 official COLREGS rules across 6 parts.
+
+### Key Features
+
+- **📚 Complete COLREGS Coverage**: All 41 official rules from the 1972 Convention
+- **🎯 Interactive Learning**: Plain English explanations with key points and scenarios
+- **📝 Comprehensive Quizzes**: Multiple difficulty levels with immediate feedback
+- **📊 Progress Tracking**: User progress persistence with completion statistics
+- **🏆 Assessment System**: Timed assessments with performance analytics
+- **🎓 Certification**: Downloadable certificates for passing grades (70%+)
+- **📱 Responsive Design**: Mobile-first design with collapsible navigation
+- **🔍 SEO Optimized**: Schema.org markup and comprehensive meta tags
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **React 18** with TypeScript for type-safe component development
+- **Wouter** for lightweight client-side routing
+- **TanStack Query** for server state management and caching
+- **Tailwind CSS** with custom maritime theme colors
+- **Radix UI + shadcn/ui** for accessible component primitives
+- **Vite** for fast development and optimized builds
+
+### Backend
+- **Node.js 20** with Express.js server
+- **TypeScript** with ES modules for type safety
+- **PostgreSQL** with Neon serverless database
+- **Drizzle ORM** for type-safe database operations
+- **Express Sessions** with PostgreSQL store for session management
+
+### Database
+- **PostgreSQL 16** for persistent data storage
+- **Drizzle Kit** for schema management and migrations
+- **Neon Database** for serverless PostgreSQL hosting
+
+### Development Tools
+- **tsx** for TypeScript execution in Node.js
+- **esbuild** for fast JavaScript bundling
+- **React Helmet** for dynamic SEO meta tag management
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 20 or higher
+- PostgreSQL database (or Neon account)
+- npm or yarn package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd colregs-academy
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   DATABASE_URL=your_postgresql_connection_string
+   NODE_ENV=development
+   ```
+
+4. **Set up the database**
+   ```bash
+   # Push schema to database
+   npm run db:push
+   
+   # Seed the database with COLREGS data
+   npm run seed
+   ```
+
+5. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+   
+   Navigate to `http://localhost:5000` to access the application.
+
+### Alternative Setup with Replit
+
+This project is designed to run seamlessly on Replit:
+
+1. Fork or import the repository into Replit
+2. The PostgreSQL database will be automatically provisioned
+3. Run the "Start application" workflow to begin development
+4. The application will be available at your Replit URL
+
+## 📖 Usage Guide
+
+### For Students
+
+1. **Start Learning**: Begin with Rule 1 and progress through all COLREGS parts
+2. **Interactive Content**: Read official text and plain English explanations
+3. **Take Quizzes**: Test your knowledge with multiple-choice questions
+4. **Track Progress**: Monitor completion status and quiz scores
+5. **Assessment**: Take comprehensive assessments covering multiple rules
+6. **Certification**: Download certificates upon successful completion
+
+### For Educators
+
+1. **Course Structure**: Use the organized part-based structure for curriculum planning
+2. **Progress Monitoring**: Track student progress through completion statistics
+3. **Assessment Tools**: Utilize timed assessments with detailed performance analytics
+4. **Difficulty Levels**: Assign questions based on easy, medium, or hard difficulty
+
+## 🗂️ Project Structure
+
+```
+colregs-academy/
+├── client/                 # Frontend React application
+│   ├── public/            # Static assets
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── lib/           # Utility libraries
+│   │   ├── pages/         # Route components
+│   │   └── main.tsx       # Application entry point
+│   └── index.html         # HTML template
+├── server/                # Backend Express application
+│   ├── complete-colregs-*.ts  # COLREGS rule data
+│   ├── routes.ts          # API route definitions
+│   ├── storage.ts         # Database interface
+│   ├── db.ts              # Database configuration
+│   ├── seed.ts            # Database seeding
+│   └── index.ts           # Server entry point
+├── shared/                # Shared types and schemas
+│   └── schema.ts          # Drizzle database schema
+├── package.json           # Dependencies and scripts
+├── tailwind.config.ts     # Tailwind CSS configuration
+├── vite.config.ts         # Vite build configuration
+└── drizzle.config.ts      # Database configuration
+```
+
+## 🎯 Available Scripts
+
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run db:push` - Push schema changes to database
+- `npm run db:studio` - Open Drizzle Studio for database management
+- `npm run seed` - Seed database with COLREGS rules and quizzes
+
+## 🏗️ Architecture Overview
+
+### Data Flow
+
+1. **Client Requests**: React components use TanStack Query for server state
+2. **API Layer**: Express routes handle CRUD operations
+3. **Storage Layer**: Drizzle ORM provides type-safe database access
+4. **Database**: PostgreSQL stores persistent data with full ACID compliance
+5. **Caching**: Client-side caching via TanStack Query with optimistic updates
+
+### Key Components
+
+- **Rules System**: Complete 41-rule COLREGS implementation with parts A-F
+- **Quiz Engine**: Multiple-choice questions with explanations and difficulty levels
+- **Progress Tracking**: User completion status and quiz performance
+- **Assessment System**: Comprehensive testing with certification
+- **SEO Framework**: Schema.org markup and dynamic meta tags
+
+## 📊 Database Schema
+
+### Core Tables
+
+- **`rules`**: COLREGS rule information (rule number, title, text, explanations)
+- **`quizzes`**: Multiple-choice questions with answers and explanations
+- **`user_progress`**: User completion status and quiz scores
+- **`assessments`**: Comprehensive assessment records
+- **`assessment_results`**: Individual assessment question results
+
+### Schema Management
+
+The project uses Drizzle ORM for type-safe database operations:
+
+```typescript
+// Example rule schema
+export const rules = pgTable("rules", {
+  id: serial("id").primaryKey(),
+  ruleNumber: varchar("rule_number", { length: 10 }).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  part: varchar("part", { length: 10 }).notNull(),
+  partTitle: varchar("part_title", { length: 255 }).notNull(),
+  officialText: text("official_text").notNull(),
+  plainEnglish: text("plain_english").notNull(),
+  // ... additional fields
+});
+```
+
+## 🎨 UI Components
+
+The application uses a consistent design system built with:
+
+- **Radix UI Primitives**: Accessible, unstyled components
+- **shadcn/ui**: Pre-styled component library
+- **Tailwind CSS**: Utility-first styling
+- **Custom Maritime Theme**: Navy blue and ocean-inspired colors
+
+### Key UI Features
+
+- **Responsive Navigation**: Collapsible sidebar for mobile devices
+- **Progress Visualization**: Progress bars and completion indicators
+- **Interactive Cards**: Hover effects and transition animations
+- **Accessibility**: ARIA labels and keyboard navigation support
+
+## 📈 SEO & Performance
+
+### SEO Features
+
+- **Schema.org Markup**: Educational content structured data
+- **Dynamic Meta Tags**: Page-specific titles and descriptions
+- **Open Graph Tags**: Social media sharing optimization
+- **Sitemap Generation**: Automatic sitemap.xml creation
+- **Mobile Optimization**: Responsive design with mobile-first approach
+
+### Performance Optimizations
+
+- **Code Splitting**: Route-based code splitting with React lazy loading
+- **Image Optimization**: SVG icons and optimized asset loading
+- **Database Indexing**: Optimized queries with proper indexing
+- **Caching Strategy**: Client-side caching with TanStack Query
+
+## 🔧 Configuration
+
+### Environment Variables
+
+```env
+# Database
+DATABASE_URL=postgresql://user:password@host:port/database
+
+# Development
+NODE_ENV=development
+PORT=5000
+
+# Optional: Replit-specific variables (auto-configured)
+REPLIT_DB_URL=
+REPL_ID=
+REPLIT_DOMAIN=
+```
+
+### Tailwind Configuration
+
+Custom maritime theme colors:
+
+```javascript
+theme: {
+  extend: {
+    colors: {
+      primary: 'hsl(214, 100%, 27%)',  // Navy blue
+      secondary: 'hsl(197, 71%, 73%)', // Light blue
+      // ... additional colors
+    }
+  }
+}
+```
+
+## 🚀 Deployment
+
+### Replit Deployment
+
+1. Click the "Deploy" button in Replit
+2. Configure autoscale deployment settings
+3. Set up custom domain (optional)
+4. The application will be available at `your-app.replit.app`
+
+### Traditional Deployment
+
+1. **Build the application**
+   ```bash
+   npm run build
+   ```
+
+2. **Set up production database**
+   ```bash
+   npm run db:push
+   npm run seed
+   ```
+
+3. **Start production server**
+   ```bash
+   npm start
+   ```
+
+4. **Configure reverse proxy** (nginx/Apache) for domain routing
+
+## 🧪 Testing
+
+### Manual Testing Checklist
+
+- [ ] All 41 COLREGS rules load correctly
+- [ ] Quiz functionality works across all difficulty levels
+- [ ] Progress tracking persists between sessions
+- [ ] Assessment system generates certificates
+- [ ] Responsive design works on mobile devices
+- [ ] SEO meta tags render correctly
+
+### Database Testing
+
+```bash
+# Verify data integrity
+npm run db:studio
+
+# Test database seeding
+npm run seed
+```
+
+## 🤝 Contributing
+
+### Development Guidelines
+
+1. **Code Style**: Follow TypeScript best practices
+2. **Component Structure**: Use functional components with hooks
+3. **Database Changes**: Always use Drizzle migrations
+4. **Testing**: Test on multiple devices and browsers
+5. **Documentation**: Update README.md for significant changes
+
+### Adding New Features
+
+1. **Schema Changes**: Update `shared/schema.ts` first
+2. **API Routes**: Add routes in `server/routes.ts`
+3. **Frontend Components**: Create reusable components
+4. **Data Seeding**: Update seed files for new data
+
+## 📞 Support
+
+For technical support or questions:
+
+1. **Documentation**: Check this README and `replit.md`
+2. **Issues**: Create GitHub issues for bugs or feature requests
+3. **Contact**: Reach out through project repository
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- **International Maritime Organization (IMO)**: For the official COLREGS regulations
+- **1972 Convention**: International Regulations for Preventing Collisions at Sea
+- **Maritime Safety Community**: For feedback and testing
+- **Open Source Libraries**: All the amazing tools that made this possible
+
+---
+
+**COLREGS Academy** - Making Maritime Safety Education Accessible to Everyone 🌊⚓
+
+*Built with ❤️ for the maritime community*
