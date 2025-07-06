@@ -32,6 +32,15 @@ export default function Home() {
     return acc;
   }, {} as Record<string, Rule[]>) || {};
 
+  // Sort rules within each part by rule number (numerical order)
+  Object.keys(rulesByPart).forEach(part => {
+    rulesByPart[part].sort((a, b) => {
+      const aNum = parseInt(a.ruleNumber);
+      const bNum = parseInt(b.ruleNumber);
+      return aNum - bNum;
+    });
+  });
+
   const completedRules = progressData?.filter(p => p.completed).length || 0;
   const totalRules = rules?.length || 0;
 
