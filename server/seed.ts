@@ -1,7 +1,7 @@
 import { db } from "./db";
 import { rules, quizzes } from "@shared/schema";
 import { completeColregsRules, completeColregsQuizzes } from "./complete-colregs-data";
-import { completeColregsRules as additionalRules, additionalQuizzes } from "./complete-colregs-full";
+import { allColregsRules, comprehensiveQuizzes } from "./complete-colregs-all-parts";
 
 // Clear existing data and reseed with complete COLREGS
 export async function clearAndReseed() {
@@ -9,25 +9,46 @@ export async function clearAndReseed() {
   await db.delete(quizzes);
   await db.delete(rules);
   
-  console.log("Inserting complete COLREGS rules...");
-  const insertedRules = await db.insert(rules).values(completeColregsRules).returning();
+  console.log("Inserting base COLREGS rules (1-10)...");
+  const baseRules = await db.insert(rules).values(completeColregsRules).returning();
   
-  // Map quiz rule references to actual rule IDs
-  const ruleIdMap = new Map<number, number>();
-  insertedRules.forEach((rule, index) => {
-    ruleIdMap.set(index + 1, rule.id);
+  console.log("Inserting extended COLREGS rules (11-41)...");
+  const extendedRules = await db.insert(rules).values(allColregsRules).returning();
+  
+  // Create rule number to ID mapping
+  const ruleMap = new Map<string, number>();
+  [...baseRules, ...extendedRules].forEach(rule => {
+    ruleMap.set(rule.ruleNumber, rule.id);
   });
   
-  // Update quiz rule IDs to match inserted rules
-  const updatedQuizzes = completeColregsQuizzes.map(quiz => ({
+  console.log("Inserting base quizzes...");
+  const baseQuizzes = completeColregsQuizzes.map(quiz => ({
     ...quiz,
-    ruleId: ruleIdMap.get(quiz.ruleId) || quiz.ruleId
+    ruleId: ruleMap.get(quiz.ruleId.toString()) || quiz.ruleId
   }));
+  await db.insert(quizzes).values(baseQuizzes).returning();
   
-  console.log("Inserting complete COLREGS quizzes...");
-  await db.insert(quizzes).values(updatedQuizzes).returning();
+  console.log("Inserting comprehensive quizzes for all rules...");
+  const extendedQuizzes = comprehensiveQuizzes.map((quiz, index) => {
+    // Map quizzes to rules 11-41
+    const ruleNumbers = [
+      "11", "12", "13", "14", "15", "16", "17", "18", "19", "19", // Rules 11-19 (2 quizzes for 19)
+      "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", // Rules 20-30
+      "32", "33", "34", "35", "36", "37", // Rules 32-37
+      "38", "39", "40", "41" // Rules 38-41
+    ];
+    const ruleNumber = ruleNumbers[index] || "11";
+    
+    return {
+      ...quiz,
+      ruleId: ruleMap.get(ruleNumber) || ruleMap.get("11")
+    };
+  });
+  await db.insert(quizzes).values(extendedQuizzes).returning();
   
-  console.log(`Complete reseed finished! Inserted ${insertedRules.length} rules and ${updatedQuizzes.length} quizzes`);
+  const totalRules = baseRules.length + extendedRules.length;
+  const totalQuizzes = baseQuizzes.length + extendedQuizzes.length;
+  console.log(`Complete COLREGS implementation finished! Inserted ${totalRules} rules and ${totalQuizzes} quizzes`);
 }
 
 const initialRules = [
