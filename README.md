@@ -16,6 +16,7 @@ COLREGS Academy is a comprehensive maritime safety education platform that teach
 - **📊 Progress Tracking**: User progress persistence with completion statistics
 - **🏆 Assessment System**: Timed assessments with performance analytics
 - **🎓 Certification**: Downloadable certificates for passing grades (70%+)
+- **🔐 User Authentication**: Google OAuth integration for progress tracking
 - **📱 Responsive Design**: Mobile-first design with collapsible navigation
 - **🔍 SEO Optimized**: Schema.org markup and comprehensive meta tags
 
@@ -35,6 +36,7 @@ COLREGS Academy is a comprehensive maritime safety education platform that teach
 - **PostgreSQL** with Neon serverless database
 - **Drizzle ORM** for type-safe database operations
 - **Express Sessions** with PostgreSQL store for session management
+- **Passport.js** with Google OAuth 2.0 for user authentication
 
 ### Database
 - **PostgreSQL 16** for persistent data storage
@@ -73,6 +75,10 @@ COLREGS Academy is a comprehensive maritime safety education platform that teach
    ```env
    DATABASE_URL=your_postgresql_connection_string
    NODE_ENV=development
+   
+   # Optional: Google OAuth for user authentication
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
    ```
 
 4. **Set up the database**
@@ -101,6 +107,45 @@ This project is designed to run seamlessly on Replit:
 2. The PostgreSQL database will be automatically provisioned
 3. Run the "Start application" workflow to begin development
 4. The application will be available at your Replit URL
+
+## 🔐 Authentication Setup (Optional)
+
+COLREGS Academy supports Google OAuth for user authentication and progress tracking. The app works without authentication (using local storage), but authenticated users get persistent progress tracking.
+
+### Google OAuth Configuration
+
+1. **Create a Google Cloud Project**
+   - Visit [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing one
+   - Enable the Google+ API
+
+2. **Configure OAuth Consent Screen**
+   - Go to "OAuth consent screen" in the left sidebar
+   - Set up your app information and authorized domains
+
+3. **Create OAuth Credentials**
+   - Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"
+   - Application type: Web application
+   - Add authorized redirect URIs:
+     - Production: `https://your-app.replit.app/api/auth/google/callback`
+     - Development: `https://your-replit-domain/api/auth/google/callback`
+
+4. **Configure Environment Variables**
+   ```env
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   ```
+
+5. **Test Authentication**
+   - Restart your application
+   - Click "Sign In" button to test Google OAuth flow
+
+### Authentication Features
+
+- **Persistent Progress**: Progress saved across devices and sessions
+- **User Profiles**: Display user name and profile picture
+- **Secure Sessions**: Express sessions with PostgreSQL store
+- **Guest Mode**: App functions without authentication using default user
 
 ## 📖 Usage Guide
 
@@ -181,6 +226,7 @@ colregs-academy/
 
 - **`rules`**: COLREGS rule information (rule number, title, text, explanations)
 - **`quizzes`**: Multiple-choice questions with answers and explanations
+- **`users`**: User profiles with Google OAuth integration
 - **`user_progress`**: User completion status and quiz scores
 - **`assessments`**: Comprehensive assessment records
 - **`assessment_results`**: Individual assessment question results
@@ -247,6 +293,13 @@ DATABASE_URL=postgresql://user:password@host:port/database
 # Development
 NODE_ENV=development
 PORT=5000
+
+# Authentication (Optional)
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
+
+# Session Security (Optional)
+SESSION_SECRET=your_session_secret_key
 
 # Optional: Replit-specific variables (auto-configured)
 REPLIT_DB_URL=

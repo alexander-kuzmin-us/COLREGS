@@ -137,6 +137,13 @@ Changelog:
   - Implemented certificate generation for passing grades (70%+) with downloadable completion certificates
   - Fixed Part B rule ordering issue with proper numerical sorting (4,5,6,7...19)
   - Created comprehensive README.md documentation covering tech stack, setup, usage, and deployment
+- July 6, 2025. Updated authentication system and documentation:
+  - Fixed Google OAuth authentication to work with optional credentials
+  - Configured dynamic callback URLs for production and development environments
+  - Added comprehensive authentication setup guide to README.md
+  - Enhanced documentation with Google OAuth configuration steps
+  - Updated environment variables section with authentication details
+  - Added authentication features section covering persistent progress and user profiles
 
 ## User Preferences
 
