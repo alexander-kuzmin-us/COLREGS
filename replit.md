@@ -152,6 +152,12 @@ Changelog:
   - Created dedicated achievements page with badge display and social sharing features
   - Added achievement navigation button to home page header
   - Updated README.md with comprehensive achievement system documentation
+- July 7, 2025. Added educational disclaimers and compliance notices:
+  - Added educational purpose disclaimer to home page hero section
+  - Included certificate limitations notice on assessment page
+  - Added FAQ entries about national COLREGS variations and certification limitations
+  - Clarified that certificates don't replace formal sailing school education
+  - Enhanced user understanding of platform's educational vs official training scope
 
 ## User Preferences
 

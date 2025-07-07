@@ -388,6 +388,14 @@ COLREGS Academy - Maritime Safety Education
                 <li>Passing grade: 70% or higher</li>
                 <li>Certificate available upon successful completion</li>
               </ul>
+              
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                <p className="text-sm text-amber-800 leading-relaxed">
+                  <strong>Certificate Notice:</strong> Certificates provided by this platform are for educational recognition only. 
+                  They do not substitute for formal maritime education, official certification courses, or sailing school requirements. 
+                  Always complete proper training with certified instructors for official qualifications.
+                </p>
+              </div>
             </div>
 
             <Button

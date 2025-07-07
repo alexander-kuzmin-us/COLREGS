@@ -150,6 +150,16 @@ export default function Home() {
               Master the essential maritime safety rules with interactive learning modules, 
               quizzes, and real-world scenarios. Learn the COLREGS that keep vessels safe worldwide.
             </p>
+            
+            {/* Educational Disclaimer */}
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 max-w-4xl mx-auto">
+              <p className="text-sm text-amber-800 leading-relaxed">
+                <strong>Educational Purpose:</strong> This platform is designed for educational training and reference only. 
+                COLREGS are implemented nationally with possible minor variations. Always consult your local maritime authorities 
+                for official requirements and current regulations applicable in your jurisdiction.
+              </p>
+            </div>
+            
             <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
               <Button className="bg-primary hover:bg-primary/90 w-full sm:w-auto" asChild>
                 <Link href="/rule/1">
@@ -157,9 +167,11 @@ export default function Home() {
                   Start Learning
                 </Link>
               </Button>
-              <Button variant="outline" className="w-full sm:w-auto">
-                <Target className="mr-2" size={16} />
-                Take Assessment
+              <Button variant="outline" className="w-full sm:w-auto" asChild>
+                <Link href="/assessment">
+                  <Target className="mr-2" size={16} />
+                  Take Assessment
+                </Link>
               </Button>
             </div>
           </div>

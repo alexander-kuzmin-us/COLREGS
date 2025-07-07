@@ -74,6 +74,16 @@ const faqData = [
         id: "updates",
         question: "Is the content up to date?",
         answer: "Yes, all content is based on the current International Regulations for Preventing Collisions at Sea (1972) as amended. The rules presented are the internationally recognized standards used by maritime authorities worldwide."
+      },
+      {
+        id: "educational-purpose",
+        question: "Is this platform for official certification?",
+        answer: "No, this platform is designed for educational purposes only. While we provide comprehensive COLREGS training and certificates for successful completion, these are educational recognition certificates that do not substitute for formal maritime education, official certification courses, or sailing school requirements. Always complete proper training with certified instructors for official qualifications."
+      },
+      {
+        id: "local-variations",
+        question: "Are COLREGS the same everywhere?",
+        answer: "COLREGS are international regulations, but they are implemented nationally and may have minor variations in different countries. Always consult your local maritime authorities for official requirements and current regulations applicable in your specific jurisdiction. This platform provides the international standard as a learning foundation."
       }
     ]
   },
