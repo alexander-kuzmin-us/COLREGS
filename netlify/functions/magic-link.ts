@@ -5,25 +5,23 @@ import { neon } from '@netlify/neon';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { eq } from 'drizzle-orm';
 import * as schema from '../../shared/schema.js';
+import jwt from 'jsonwebtoken';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const sql = neon();
 const db = drizzle(sql, { schema });
 
-// Magic link token table (in-memory for demo, use DB in production)
 const MAGIC_LINK_EXPIRY_MINUTES = 15;
-
-// You should create a table in your DB for magic link tokens in production
-// For demo, we'll use a simple in-memory map
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
+const JWT_EXPIRY = '7d';
 const tokens = new Map<string, { email: string; expires: number }>();
-
-const APP_URL = process.env.APP_URL || 'http://localhost:5173'; // Set this to your deployed frontend URL
+const APP_URL = process.env.APP_URL || 'http://localhost:5173';
 
 export const handler: Handler = async (event: HandlerEvent, context: HandlerContext): Promise<HandlerResponse> => {
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
   };
 
@@ -42,11 +40,9 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     if (!email || typeof email !== 'string') {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Email is required' }) };
     }
-    // Generate token
     const token = nanoid(32);
     const expires = Date.now() + MAGIC_LINK_EXPIRY_MINUTES * 60 * 1000;
     tokens.set(token, { email, expires });
-    // Send email
     const magicLink = `${APP_URL}/auth/callback?token=${token}`;
     try {
       await resend.emails.send({
@@ -72,10 +68,8 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       tokens.delete(token);
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Token expired' }) };
     }
-    // Upsert user in DB
     let user = await db.select().from(schema.users).where(eq(schema.users.email, email));
     if (!user.length) {
-      // Create user
       await db.insert(schema.users).values({
         id: nanoid(),
         email,
@@ -85,14 +79,33 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       });
       user = await db.select().from(schema.users).where(eq(schema.users.email, email));
     }
-    // TODO: Set session or JWT here
     tokens.delete(token);
-    // For demo, just return user info
+    // Issue JWT
+    const jwtToken = jwt.sign({ id: user[0].id, email: user[0].email }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ success: true, user: user[0] })
+      body: JSON.stringify({ success: true, user: user[0], token: jwtToken })
     };
+  }
+
+  // Auth user endpoint
+  if (event.httpMethod === 'GET' && event.path.endsWith('/auth/user')) {
+    const authHeader = event.headers['authorization'] || event.headers['Authorization'];
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return { statusCode: 401, headers, body: JSON.stringify({ error: 'Not authenticated' }) };
+    }
+    const token = authHeader.replace('Bearer ', '');
+    try {
+      const payload = jwt.verify(token, JWT_SECRET) as { id: string, email: string };
+      const user = await db.select().from(schema.users).where(eq(schema.users.id, payload.id));
+      if (!user.length) {
+        return { statusCode: 401, headers, body: JSON.stringify({ error: 'User not found' }) };
+      }
+      return { statusCode: 200, headers, body: JSON.stringify(user[0]) };
+    } catch (err) {
+      return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid or expired token' }) };
+    }
   }
 
   return { statusCode: 404, headers, body: JSON.stringify({ error: 'Not found' }) };

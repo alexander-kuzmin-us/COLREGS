@@ -6,12 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Ship, Search, BookOpen, Award, Clock, Target, Trophy } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import type { Rule } from "@shared/schema";
 import { useProgress } from "@/hooks/use-progress";
 import { useAuth } from "@/hooks/useAuth";
 import AuthButton from "@/components/auth-button";
 import { HomepageSchemaMarkup } from "@/components/seo/schema-markup";
+import { useEffect } from "react";
 
 export default function Home() {
   const { data: rules, isLoading } = useQuery<Rule[]>({
@@ -20,6 +21,28 @@ export default function Home() {
 
   const { user, isAuthenticated } = useAuth();
   const { progressData, overallProgress } = useProgress();
+  const [location, setLocation] = useLocation();
+
+  // Magic link callback handler
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get("token");
+    if (token) {
+      // Call backend to verify token and get JWT
+      fetch(`/api/magic-link-verify?token=${token}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.token) {
+            localStorage.setItem("jwt", data.token);
+            // Remove token from URL
+            url.searchParams.delete("token");
+            window.history.replaceState({}, document.title, url.pathname);
+            // Optionally show a toast or reload
+            window.location.reload();
+          }
+        });
+    }
+  }, []);
 
   if (isLoading) {
     return (

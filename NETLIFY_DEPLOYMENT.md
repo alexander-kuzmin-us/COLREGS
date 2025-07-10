@@ -273,3 +273,42 @@ Your database will be automatically managed by Netlify Neon with:
 - The seed script populates 41 rules and comprehensive quizzes
 - Run `npm run seed:netlify` after setting up your database
 - Check `/api/status` to verify database is populated 
+
+##  **How to Seed Your Netlify Database:**
+
+### **Option 1: Use the New Netlify Function (Recommended)**
+
+After Netlify deploys the new function (should be automatic), you can seed your database by making a POST request to:
+
+```
+https://your-app-name.netlify.app/.netlify/functions/seed
+```
+
+**You can do this by:**
+
+1. **Using curl:**
+   ```bash
+   curl -X POST https://your-app-name.netlify.app/.netlify/functions/seed
+   ```
+
+2. **Using a web browser:**
+   - Visit the URL in your browser
+   - Or use a tool like Postman/Insomnia
+
+3. **Using the Netlify CLI:**
+   ```bash
+   netlify functions:invoke seed
+   ```
+
+### **Option 2: Wait for Netlify to Deploy**
+
+Netlify should automatically deploy the new function within a few minutes. You can check your Netlify dashboard to see when the deployment is complete.
+
+##  **What This Solves:**
+
+- ✅ **Netlify will now have the seeding function**
+- ✅ **You can seed the database from anywhere**
+- ✅ **No need to run local scripts**
+- ✅ **Database will be populated on Netlify's side**
+
+Once you trigger the seed function, your Netlify app will have all 41 COLREGS rules and work perfectly! 
