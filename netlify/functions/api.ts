@@ -33,6 +33,16 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       // Rules API
       if (url === '/api/rules' && method === 'get') {
         const allRules = await db.select().from(rules);
+        
+        // If no rules found, return empty array with a message
+        if (allRules.length === 0) {
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify([]),
+          };
+        }
+        
         return {
           statusCode: 200,
           headers,
@@ -49,7 +59,35 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
           return {
             statusCode: 404,
             headers,
-            body: JSON.stringify({ error: 'Rule not found' }),
+            body: JSON.stringify({ 
+              error: 'Rule not found',
+              message: 'Database may be empty. Please run the seed script to populate data.',
+              ruleId 
+            }),
+          };
+        }
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(rule[0]),
+        };
+      }
+
+      // Rule by number API (for frontend navigation)
+      if (url.match(/^\/api\/rules\/number\/\d+$/) && method === 'get') {
+        const ruleNumber = url.split('/').pop()!;
+        const rule = await db.select().from(rules).where(eq(rules.ruleNumber, ruleNumber));
+        
+        if (rule.length === 0) {
+          return {
+            statusCode: 404,
+            headers,
+            body: JSON.stringify({ 
+              error: 'Rule not found',
+              message: 'Database may be empty. Please run the seed script to populate data.',
+              ruleNumber 
+            }),
           };
         }
 
@@ -63,6 +101,15 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       // Quizzes API
       if (url === '/api/quizzes' && method === 'get') {
         const allQuizzes = await db.select().from(quizzes);
+        
+        if (allQuizzes.length === 0) {
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify([]),
+          };
+        }
+        
         return {
           statusCode: 200,
           headers,
@@ -106,6 +153,24 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
         };
       }
 
+      // Database status API
+      if (url === '/api/status' && method === 'get') {
+        const rulesCount = await db.select().from(rules);
+        const quizzesCount = await db.select().from(quizzes);
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            database: 'connected',
+            rules: rulesCount.length,
+            quizzes: quizzesCount.length,
+            seeded: rulesCount.length > 0,
+            message: rulesCount.length === 0 ? 'Database is empty. Run seed script to populate data.' : 'Database is populated and ready.'
+          }),
+        };
+      }
+
       // Auth endpoints (placeholder)
       if (url.startsWith('/api/auth/')) {
         return {
@@ -135,7 +200,11 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal server error' }),
+      body: JSON.stringify({ 
+        error: 'Internal server error',
+        message: 'Database connection or query failed. Check your NETLIFY_DATABASE_URL.',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }),
     };
   }
 }; 

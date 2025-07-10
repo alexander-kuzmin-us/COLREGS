@@ -11,7 +11,8 @@
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push",
-    "migrate:netlify": "node migrate-to-netlify.js"
+    "migrate:netlify": "node migrate-to-netlify.js",
+    "seed:netlify": "node seed-netlify.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

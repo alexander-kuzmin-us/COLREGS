@@ -29,6 +29,32 @@ export default function Home() {
     );
   }
 
+  // Check if database is empty
+  if (!rules || rules.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center p-8">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-yellow-800 mb-4">
+              Database Not Populated
+            </h2>
+            <p className="text-yellow-700 mb-4">
+              The COLREGS database is empty. Please run the seed script to populate the data.
+            </p>
+            <div className="bg-gray-100 rounded p-3 text-sm font-mono text-gray-700 mb-4">
+              <p>Run this command locally:</p>
+              <p>export NETLIFY_DATABASE_URL="your_url"</p>
+              <p>node seed-netlify.js</p>
+            </div>
+            <p className="text-sm text-yellow-600">
+              Contact your administrator to populate the database.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const rulesByPart = rules?.reduce((acc, rule) => {
     if (!acc[rule.part]) acc[rule.part] = [];
     acc[rule.part].push(rule);

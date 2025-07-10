@@ -36,7 +36,24 @@ export NETLIFY_DATABASE_URL="your_netlify_neon_database_url"
 npm run migrate:netlify
 ```
 
-### 4. Deploy to Netlify
+### 4. Database Seeding (IMPORTANT!)
+
+**This step is crucial!** Your app won't work without data. Run the seed script to populate the database:
+
+```bash
+# Set your environment variable
+export NETLIFY_DATABASE_URL="your_netlify_neon_database_url"
+
+# Run seeding
+npm run seed:netlify
+```
+
+This will populate your database with:
+- 41 COLREGS rules (1-41)
+- Comprehensive quizzes for each rule
+- All parts (A-E) of the regulations
+
+### 5. Deploy to Netlify
 
 #### Option A: Deploy via Git (Recommended)
 
@@ -44,7 +61,7 @@ npm run migrate:netlify
 2. Connect your repository to Netlify
 3. Set build settings:
    - **Build command**: `npm run build:netlify`
-   - **Publish directory**: `dist`
+   - **Publish directory**: `dist/public`
    - **Functions directory**: `netlify/functions`
 
 #### Option B: Deploy via Netlify CLI
@@ -69,9 +86,12 @@ Your app has been updated with the following new files:
 COLREGS/
 ├── netlify.toml              # Netlify configuration
 ├── migrate-to-netlify.js     # Database migration script
+├── seed-netlify.js          # Database seeding script
 ├── netlify/
 │   └── functions/
 │       └── api.ts           # Netlify function wrapper
+├── client/public/
+│   └── _redirects           # SPA routing rules
 └── NETLIFY_DEPLOYMENT.md    # This guide
 ```
 
@@ -123,17 +143,28 @@ npm run migrate:netlify
 
 ### Common Issues
 
-1. **Build Failures**
+1. **"Page Not Found" Error**
+   - Check that `_redirects` file is in `dist/public/`
+   - Verify publish directory is set to `dist/public`
+   - Ensure build is not failing
+
+2. **Empty Database / "Start Learning" Not Working**
+   - **Most common issue**: Database is empty
+   - Run the seed script: `npm run seed:netlify`
+   - Check database status: Visit `/api/status` endpoint
+   - Verify `NETLIFY_DATABASE_URL` is correct
+
+3. **Build Failures**
    - Check Node.js version (should be 18+)
    - Verify all dependencies are installed
    - Check build logs in Netlify dashboard
 
-2. **Database Connection Issues**
+4. **Database Connection Issues**
    - Verify `NETLIFY_DATABASE_URL` is correct
    - Check if database is accessible from Netlify
    - Ensure SSL is enabled for database connection
 
-3. **Function Timeouts**
+5. **Function Timeouts**
    - Netlify functions have a 10-second timeout
    - Optimize database queries
    - Consider caching for heavy operations
@@ -158,9 +189,22 @@ export SESSION_SECRET="your_secret"
 # Test migration
 npm run migrate:netlify
 
+# Test seeding
+npm run seed:netlify
+
 # Test build
 npm run build:netlify
 ```
+
+### Database Status Check
+
+You can check your database status by visiting:
+- `https://your-app.netlify.app/api/status`
+
+This will show:
+- Database connection status
+- Number of rules and quizzes
+- Whether data is seeded
 
 ## 📊 Performance Considerations
 
@@ -210,6 +254,7 @@ If you encounter issues:
 3. Review build logs
 4. Check environment variables
 5. Test locally first
+6. **Most importantly**: Ensure database is seeded!
 
 ## 🎉 Success!
 
@@ -220,4 +265,11 @@ Your database will be automatically managed by Netlify Neon with:
 - Automatic backups
 - SSL encryption
 - Connection pooling
-- Performance monitoring 
+- Performance monitoring
+
+## 🚨 Important Notes
+
+- **Database seeding is required** - Your app won't work without data
+- The seed script populates 41 rules and comprehensive quizzes
+- Run `npm run seed:netlify` after setting up your database
+- Check `/api/status` to verify database is populated 
