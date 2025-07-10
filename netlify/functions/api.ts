@@ -1,78 +1,141 @@
-import { Handler } from '@netlify/functions';
-import express from 'express';
-import { registerRoutes } from '../../server/routes';
+import { Handler, HandlerEvent, HandlerContext, HandlerResponse } from '@netlify/functions';
+import { db } from '../../server/db';
+import { rules, quizzes, userProgress, users, assessments, achievements } from '../../shared/schema';
+import { eq, and } from 'drizzle-orm';
 
-// Create Express app
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-// Register all routes
-const server = await registerRoutes(app);
-
-// Netlify function handler
-export const handler: Handler = async (event, context) => {
-  // Convert Netlify event to Express request
-  const { httpMethod, path, queryStringParameters, body, headers } = event;
+// Simple API handler for Netlify
+export const handler: Handler = async (event: HandlerEvent, context: HandlerContext): Promise<HandlerResponse> => {
+  const { httpMethod, path, queryStringParameters, body } = event;
   
-  // Create a mock request object
-  const req = {
-    method: httpMethod,
-    url: path,
-    query: queryStringParameters || {},
-    body: body ? JSON.parse(body) : {},
-    headers: headers || {},
-    path: path,
-  } as any;
+  // Enable CORS
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  };
 
-  // Create a mock response object
-  const res = {
-    statusCode: 200,
-    headers: {},
-    body: '',
-    status: function(code: number) {
-      this.statusCode = code;
-      return this;
-    },
-    json: function(data: any) {
-      this.body = JSON.stringify(data);
-      this.headers['Content-Type'] = 'application/json';
-      return this;
-    },
-    send: function(data: any) {
-      this.body = typeof data === 'string' ? data : JSON.stringify(data);
-      return this;
-    },
-    setHeader: function(name: string, value: string) {
-      this.headers[name] = value;
-      return this;
-    },
-  } as any;
-
-  // Handle the request through Express
-  try {
-    // Find matching route
-    const route = app._router.stack.find((layer: any) => {
-      if (layer.route) {
-        return layer.route.path === path && layer.route.methods[httpMethod.toLowerCase()];
-      }
-      return false;
-    });
-
-    if (route) {
-      await route.handle(req, res, () => {});
-    } else {
-      res.status(404).json({ error: 'Not found' });
-    }
-  } catch (error) {
-    console.error('Error handling request:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  // Handle CORS preflight
+  if (httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: '',
+    };
   }
 
-  // Return Netlify response format
-  return {
-    statusCode: res.statusCode,
-    headers: res.headers,
-    body: res.body,
-  };
+  try {
+    const url = path;
+    const method = httpMethod.toLowerCase();
+
+    // API Routes
+    if (url.startsWith('/api/')) {
+      // Rules API
+      if (url === '/api/rules' && method === 'get') {
+        const allRules = await db.select().from(rules);
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(allRules),
+        };
+      }
+
+      // Single rule API
+      if (url.match(/^\/api\/rules\/\d+$/) && method === 'get') {
+        const ruleId = parseInt(url.split('/').pop()!);
+        const rule = await db.select().from(rules).where(eq(rules.id, ruleId));
+        
+        if (rule.length === 0) {
+          return {
+            statusCode: 404,
+            headers,
+            body: JSON.stringify({ error: 'Rule not found' }),
+          };
+        }
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(rule[0]),
+        };
+      }
+
+      // Quizzes API
+      if (url === '/api/quizzes' && method === 'get') {
+        const allQuizzes = await db.select().from(quizzes);
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(allQuizzes),
+        };
+      }
+
+      // Quiz by rule API
+      if (url.match(/^\/api\/quizzes\/rule\/\d+$/) && method === 'get') {
+        const ruleId = parseInt(url.split('/').pop()!);
+        const ruleQuizzes = await db.select().from(quizzes).where(eq(quizzes.ruleId, ruleId));
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(ruleQuizzes),
+        };
+      }
+
+      // User progress API
+      if (url === '/api/progress' && method === 'get') {
+        const userId = queryStringParameters?.userId || 'default';
+        const userProgressData = await db.select().from(userProgress).where(eq(userProgress.userId, userId));
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(userProgressData),
+        };
+      }
+
+      // Update progress API
+      if (url === '/api/progress' && method === 'post') {
+        const progressData = JSON.parse(body || '{}');
+        const newProgress = await db.insert(userProgress).values(progressData).returning();
+        
+        return {
+          statusCode: 201,
+          headers,
+          body: JSON.stringify(newProgress[0]),
+        };
+      }
+
+      // Auth endpoints (placeholder)
+      if (url.startsWith('/api/auth/')) {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ message: 'Auth endpoint - implement as needed' }),
+        };
+      }
+
+      // Default API response
+      return {
+        statusCode: 404,
+        headers,
+        body: JSON.stringify({ error: 'API endpoint not found' }),
+      };
+    }
+
+    // Non-API routes should be handled by the frontend
+    return {
+      statusCode: 404,
+      headers,
+      body: JSON.stringify({ error: 'Not found' }),
+    };
+
+  } catch (error) {
+    console.error('API Error:', error);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Internal server error' }),
+    };
+  }
 }; 

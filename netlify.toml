@@ -1,23 +1,25 @@
 [build]
-  command = "npm run build"
-  publish = "dist"
-  functions = "dist"
+  command = "npm run build:netlify"
+  publish = "dist/public"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18"
 
+# Handle API routes
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
 
+# Handle SPA routing - serve index.html for all non-API routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
 [functions]
-  directory = "dist"
+  directory = "netlify/functions"
   node_bundler = "esbuild"
 
 [functions."api"]
