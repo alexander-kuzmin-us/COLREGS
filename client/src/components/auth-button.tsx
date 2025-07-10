@@ -1,11 +1,19 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { LogIn, LogOut, User } from "lucide-react";
+import { LogIn, LogOut, User, Mail } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export default function AuthButton() {
   const { user, isAuthenticated, isLoading } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   if (isLoading) {
     return (
@@ -15,14 +23,69 @@ export default function AuthButton() {
 
   if (!isAuthenticated) {
     return (
-      <Button 
-        variant="outline" 
-        size="sm"
-        onClick={() => window.location.href = "/api/auth/google"}
-      >
-        <LogIn className="mr-2 h-4 w-4" />
-        Sign In
-      </Button>
+      <>
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={() => setOpen(true)}
+        >
+          <LogIn className="mr-2 h-4 w-4" />
+          Sign In
+        </Button>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Sign in with Email</DialogTitle>
+            </DialogHeader>
+            {success ? (
+              <div className="text-green-600 py-4">Check your email for a magic link!</div>
+            ) : (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setLoading(true);
+                  setError(null);
+                  setSuccess(false);
+                  try {
+                    const res = await fetch("/api/magic-link-request", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ email }),
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || "Failed to send magic link");
+                    setSuccess(true);
+                  } catch (err: any) {
+                    setError(err.message || "Failed to send magic link");
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                className="space-y-4"
+              >
+                <Input
+                  type="email"
+                  placeholder="you@email.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  autoFocus
+                  disabled={loading}
+                />
+                {error && <div className="text-red-600 text-sm">{error}</div>}
+                <DialogFooter>
+                  <Button type="submit" disabled={loading || !email}>
+                    {loading ? "Sending..." : "Send Magic Link"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            )}
+            <div className="pt-4 text-xs text-gray-500 text-center">
+              Or <a href="/api/auth/google" className="underline">sign in with Google</a>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </>
     );
   }
 
