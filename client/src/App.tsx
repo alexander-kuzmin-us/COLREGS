@@ -8,9 +8,12 @@ import { ComprehensiveSchemaMarkup } from "@/components/schema-markup";
 import Home from "@/pages/home";
 import RulePage from "@/pages/rule";
 import FAQ from "@/pages/faq";
+import PrivacyPolicy from "@/pages/privacy";
+import TermsOfService from "@/pages/terms";
 import AssessmentPage from "@/pages/assessment-simple";
 import AchievementsPage from "@/pages/achievements";
 import NotFound from "@/pages/not-found";
+import CookieConsentBanner from "@/components/cookie-consent-banner";
 
 function Router() {
   return (
@@ -18,6 +21,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/rule/:ruleNumber" component={RulePage} />
       <Route path="/faq" component={FAQ} />
+      <Route path="/privacy" component={PrivacyPolicy} />
+      <Route path="/terms" component={TermsOfService} />
       <Route path="/assessment" component={AssessmentPage} />
       <Route path="/achievements" component={AchievementsPage} />
       <Route component={NotFound} />
@@ -34,6 +39,7 @@ function App() {
             <ComprehensiveSchemaMarkup />
             <Toaster />
             <Router />
+            <CookieConsentBanner />
           </div>
         </TooltipProvider>
       </QueryClientProvider>

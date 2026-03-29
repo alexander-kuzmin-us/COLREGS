@@ -9,6 +9,8 @@ import { CheckCircle, XCircle, Clock, Award, Target, BookOpen, Download } from "
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 import type { Quiz, Rule } from "@shared/schema";
+import { buildCertificateDownloadText } from "@/lib/certificate-disclaimer";
+import CertificatePreview from "@/components/certificate-preview";
 
 interface AssessmentQuestion extends Quiz {
   ruleName: string;
@@ -333,21 +335,14 @@ export default function AssessmentPage() {
 
   const downloadCertificate = () => {
     if (!assessmentReport || !assessmentReport.passingGrade) return;
-    
-    const certificateContent = `
-COLREGS ACADEMY CERTIFICATE OF COMPLETION
 
-This certifies that the holder has successfully completed
-the International Regulations for Preventing Collisions at Sea
-Assessment with a score of ${assessmentReport.score.toFixed(1)}%
-
-Date: ${new Date().toLocaleDateString()}
-Questions: ${assessmentReport.totalQuestions}
-Correct Answers: ${assessmentReport.correctAnswers}
-Time Taken: ${formatTime(assessmentReport.timeSpent)}
-
-COLREGS Academy - Maritime Safety Education
-    `;
+    const certificateContent = buildCertificateDownloadText({
+      score: assessmentReport.score,
+      dateFormatted: new Date().toLocaleDateString(),
+      totalQuestions: assessmentReport.totalQuestions,
+      correctAnswers: assessmentReport.correctAnswers,
+      timeFormatted: formatTime(assessmentReport.timeSpent),
+    });
 
     const blob = new Blob([certificateContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -390,10 +385,12 @@ COLREGS Academy - Maritime Safety Education
               </ul>
               
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-                <p className="text-sm text-amber-800 leading-relaxed">
-                  <strong>Certificate Notice:</strong> Certificates provided by this platform are for educational recognition only. 
-                  They do not substitute for formal maritime education, official certification courses, or sailing school requirements. 
-                  Always complete proper training with certified instructors for official qualifications.
+                <p className="text-sm text-amber-900 leading-relaxed font-medium">
+                  <strong>Certificate notice:</strong> Any certificate issued after this assessment includes on its face:{" "}
+                  “This certificate is issued for educational purposes only. It does not constitute official
+                  certification, does not satisfy any statutory or flag state requirement, and is not recognized by
+                  the IMO, USCG, MCA, or any maritime authority.” It does not substitute for formal maritime
+                  education or licensing. Always complete training required by your flag state and employer.
                 </p>
               </div>
             </div>
@@ -542,6 +539,19 @@ COLREGS Academy - Maritime Safety Education
               </div>
             </CardContent>
           </Card>
+
+          {assessmentReport.passingGrade && (
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Your certificate (same text as download)</h2>
+              <CertificatePreview
+                scorePercent={assessmentReport.score}
+                dateFormatted={new Date().toLocaleDateString()}
+                totalQuestions={assessmentReport.totalQuestions}
+                correctAnswers={assessmentReport.correctAnswers}
+                timeFormatted={formatTime(assessmentReport.timeSpent)}
+              />
+            </div>
+          )}
 
           {/* Part Breakdown */}
           <Card>

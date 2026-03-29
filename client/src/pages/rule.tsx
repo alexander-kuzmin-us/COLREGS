@@ -25,6 +25,7 @@ import Sidebar from "@/components/sidebar";
 import QuizSection from "@/components/quiz";
 import ProgressModal from "@/components/progress-modal";
 import RuleTextDisplay from "@/components/rule-text-display";
+import SiteFooter from "@/components/site-footer";
 import { RuleSchemaMarkup } from "@/components/seo/schema-markup";
 import { useState } from "react";
 
@@ -97,7 +98,7 @@ export default function RulePage() {
   const nextRule = getNextRule();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Helmet>
         <title>{`COLREGS Rule ${rule.ruleNumber} - ${rule.title} | Maritime Safety Training`}</title>
         <meta name="description" content={`Learn COLREGS Rule ${rule.ruleNumber}: ${rule.title}. ${rule.plainEnglish} Master maritime collision prevention with interactive lessons, key points, and knowledge checks.`} />
@@ -123,11 +124,7 @@ export default function RulePage() {
         ))}
       </Helmet>
       
-      <RuleSchemaMarkup 
-        rule={rule}
-        currentProgress={overallProgress}
-        totalRules={totalRules}
-      />
+      <RuleSchemaMarkup rule={rule} />
       
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
@@ -160,6 +157,12 @@ export default function RulePage() {
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
                 <Link href="/faq">FAQ</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/privacy">Privacy</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/terms">Terms</Link>
               </Button>
               <div className="hidden sm:block text-right">
                 <div className="text-sm font-medium text-gray-700">Progress</div>
@@ -386,6 +389,8 @@ export default function RulePage() {
           </main>
         </div>
       </div>
+
+      <SiteFooter />
 
       {/* Progress Modal */}
       <ProgressModal 

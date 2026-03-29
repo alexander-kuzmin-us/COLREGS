@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Ship, Search, Home, BookOpen, HelpCircle, Users, Clock, Award } from "lucide-react";
 import { Link } from "wouter";
+import SiteFooter from "@/components/site-footer";
 
 const faqData = [
   {
@@ -131,7 +132,7 @@ export default function FAQ() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Helmet>
         <title>FAQ - How to Use COLREGS Academy | Maritime Safety Learning Platform</title>
         <meta name="description" content="Frequently asked questions about using COLREGS Academy. Learn how to navigate the platform, track progress, take quizzes, and master maritime collision prevention rules." />
@@ -184,6 +185,12 @@ export default function FAQ() {
                   <Home className="mr-2" size={16} />
                   <span className="hidden sm:inline">Home</span>
                 </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/privacy">Privacy</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/terms">Terms</Link>
               </Button>
             </div>
           </div>
@@ -322,6 +329,8 @@ export default function FAQ() {
           </CardContent>
         </Card>
       </div>
+
+      <SiteFooter />
     </div>
   );
 }

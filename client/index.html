@@ -5,13 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     
-    <!-- SEO Meta Tags -->
+    <!-- SEO Meta Tags (overridden per-route in React Helmet where applicable) -->
     <title>COLREGS Academy - Maritime Safety Education | International Collision Prevention Rules</title>
     <meta name="description" content="Master maritime safety with COLREGS Academy's interactive learning platform. Learn International Regulations for Preventing Collisions at Sea through quizzes, explanations, and real-world scenarios. Essential training for mariners, boat operators, and maritime professionals.">
     <meta name="keywords" content="COLREGS, maritime safety, collision prevention, navigation rules, maritime education, sailing rules, boat safety, marine training, international maritime law, vessel navigation">
     <meta name="author" content="COLREGS Academy">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://colregs-academy.replit.app">
+    <meta name="theme-color" content="#0f172a" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -20,90 +21,38 @@
     <meta property="og:description" content="Interactive learning platform for International Regulations for Preventing Collisions at Sea. Master maritime safety through quizzes and real-world scenarios.">
     <meta property="og:image" content="https://colregs-academy.replit.app/og-image.jpg">
     <meta property="og:site_name" content="COLREGS Academy">
+    <meta property="og:locale" content="en_US">
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://colregs-academy.replit.app">
-    <meta property="twitter:title" content="COLREGS Academy - Maritime Safety Education">
-    <meta property="twitter:description" content="Interactive learning platform for International Regulations for Preventing Collisions at Sea. Master maritime safety through quizzes and real-world scenarios.">
-    <meta property="twitter:image" content="https://colregs-academy.replit.app/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://colregs-academy.replit.app">
+    <meta name="twitter:title" content="COLREGS Academy - Maritime Safety Education">
+    <meta name="twitter:description" content="Interactive learning platform for International Regulations for Preventing Collisions at Sea. Master maritime safety through quizzes and real-world scenarios.">
+    <meta name="twitter:image" content="https://colregs-academy.replit.app/og-image.jpg">
     
-    <!-- Schema.org structured data for Educational Organization -->
+    <!-- Minimal JSON-LD for crawlers that do not execute JS; full graph is injected by the app -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
-      "name": "COLREGS Academy",
-      "description": "Interactive maritime safety education platform teaching International Regulations for Preventing Collisions at Sea",
-      "url": "https://colregs-academy.replit.app",
-      "logo": "https://colregs-academy.replit.app/logo.png",
-      "sameAs": [],
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "International"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Maritime Safety Courses",
-        "itemListElement": [
-          {
-            "@type": "Course",
-            "name": "COLREGS - International Regulations for Preventing Collisions at Sea",
-            "description": "Complete course covering all parts of COLREGS including general rules, steering and sailing rules, lights and shapes, sound signals, and exemptions",
-            "provider": {
-              "@type": "Organization",
-              "name": "COLREGS Academy"
-            },
-            "hasCourseInstance": {
-              "@type": "CourseInstance",
-              "courseMode": "online",
-              "courseWorkload": "PT2H30M"
-            },
-            "audience": {
-              "@type": "Audience",
-              "audienceType": "Maritime Professionals, Boat Operators, Sailors, Navigation Students"
-            },
-            "teaches": [
-              "Collision Prevention Rules",
-              "Maritime Navigation Safety",
-              "Vessel Right-of-Way",
-              "Navigation Lights and Signals",
-              "Maritime Emergency Procedures"
-            ]
-          }
-        ]
-      }
-    }
-    </script>
-    
-    <!-- FAQ Schema -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
+      "@graph": [
         {
-          "@type": "Question",
-          "name": "What are COLREGS?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "COLREGS (International Regulations for Preventing Collisions at Sea) are international maritime safety rules that govern vessel navigation and collision prevention on the world's oceans and connected waterways."
-          }
+          "@type": "Organization",
+          "@id": "https://colregs-academy.replit.app/#organization",
+          "name": "COLREGS Academy",
+          "url": "https://colregs-academy.replit.app",
+          "logo": "https://colregs-academy.replit.app/generated-icon.png",
+          "description": "Educational platform for learning COLREGS (International Regulations for Preventing Collisions at Sea). Not affiliated with IMO, USCG, or MCA; certificates are educational only."
         },
         {
-          "@type": "Question",
-          "name": "Who needs to learn COLREGS?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "COLREGS are essential for all mariners including commercial vessel operators, recreational boaters, yacht captains, fishing vessel operators, and anyone navigating waterways where these international rules apply."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How many rules are in COLREGS?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "COLREGS contains 38 rules organized into 5 parts: General (Rules 1-3), Steering and Sailing Rules (Rules 4-19), Lights and Shapes (Rules 20-31), Sound and Light Signals (Rules 32-37), and Exemptions (Rule 38)."
+          "@type": "WebSite",
+          "@id": "https://colregs-academy.replit.app/#website",
+          "name": "COLREGS Academy",
+          "url": "https://colregs-academy.replit.app",
+          "publisher": { "@id": "https://colregs-academy.replit.app/#organization" },
+          "inLanguage": "en-US",
+          "potentialAction": {
+            "@type": "ReadAction",
+            "target": "https://colregs-academy.replit.app/rule/1"
           }
         }
       ]
@@ -113,7 +62,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>
 </html>

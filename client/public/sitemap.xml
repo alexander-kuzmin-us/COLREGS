@@ -8,6 +8,22 @@
     <priority>1.0</priority>
   </url>
   
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://colregs-academy.replit.app/privacy</loc>
+    <lastmod>2026-03-28T00:00:00+00:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Terms of Service -->
+  <url>
+    <loc>https://colregs-academy.replit.app/terms</loc>
+    <lastmod>2026-03-28T00:00:00+00:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
   <!-- FAQ Page -->
   <url>
     <loc>https://colregs-academy.replit.app/faq</loc>

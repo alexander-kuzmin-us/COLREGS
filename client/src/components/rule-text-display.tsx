@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { RULE_TEXT_ATTRIBUTION } from "@/lib/rule-text-source";
 
 interface RuleTextDisplayProps {
   title: string;
@@ -60,6 +61,11 @@ export default function RuleTextDisplay({ title, text, isOfficial = false }: Rul
         <div className="space-y-2">
           {formatRuleText(text)}
         </div>
+        {isOfficial && (
+          <p className="mt-4 pt-4 border-t border-blue-100 text-xs text-gray-600 leading-relaxed">
+            {RULE_TEXT_ATTRIBUTION}
+          </p>
+        )}
       </CardContent>
     </Card>
   );

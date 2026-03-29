@@ -11,6 +11,7 @@ import type { Rule } from "@shared/schema";
 import { useProgress } from "@/hooks/use-progress";
 import { useAuth } from "@/hooks/useAuth";
 import AuthButton from "@/components/auth-button";
+import SiteFooter from "@/components/site-footer";
 import { HomepageSchemaMarkup } from "@/components/seo/schema-markup";
 import { useEffect } from "react";
 
@@ -97,7 +98,7 @@ export default function Home() {
   const totalRules = rules?.length || 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Helmet>
         <title>COLREGS Academy - Learn Maritime Safety Rules | Interactive Training Platform</title>
         <meta name="description" content={`Master maritime safety with COLREGS Academy. Interactive training for ${totalRules} international collision prevention rules. ${completedRules} rules completed, ${Math.round(overallProgress)}% progress. Perfect for mariners, boat operators, and maritime professionals.`} />
@@ -158,6 +159,12 @@ export default function Home() {
               </Button>
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
                 <Link href="/faq">FAQ</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/privacy">Privacy</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                <Link href="/terms">Terms</Link>
               </Button>
               {isAuthenticated && (
                 <div className="hidden sm:block text-right">
@@ -343,6 +350,8 @@ export default function Home() {
           })}
         </div>
       </div>
+
+      <SiteFooter />
     </div>
   );
 }

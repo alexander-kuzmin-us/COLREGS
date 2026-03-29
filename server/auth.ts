@@ -17,6 +17,7 @@ export function getSession() {
   });
   
   return session({
+    name: "session",
     secret: process.env.SESSION_SECRET || "your-secret-key-change-this",
     store: sessionStore,
     resave: false,

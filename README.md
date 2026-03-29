@@ -361,13 +361,6 @@ theme: {
 
 ## 🚀 Deployment
 
-### Replit Deployment
-
-1. Click the "Deploy" button in Replit
-2. Configure autoscale deployment settings
-3. Set up custom domain (optional)
-4. The application will be available at `your-app.replit.app`
-
 ### Traditional Deployment
 
 1. **Build the application**
@@ -430,7 +423,7 @@ npm run seed
 
 For technical support or questions:
 
-1. **Documentation**: Check this README and `replit.md`
+1. **Documentation**: Check this README and `NETLIFY_DEPLOYMENT.md` if you use Netlify
 2. **Issues**: Create GitHub issues for bugs or feature requests
 3. **Contact**: Reach out through project repository
 
@@ -440,8 +433,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- **International Maritime Organization (IMO)**: For the official COLREGS regulations
-- **1972 Convention**: International Regulations for Preventing Collisions at Sea
+- **U.S. Coast Guard**: Official rule text in this project is aligned with the public domain *Navigation Rules and Regulations Handbook* (COMDTINST M16672.2D), not republished from IMO commercial editions
+- **1972 COLREGS Convention**: International Regulations for Preventing Collisions at Sea (underlying treaty regime)
 - **Maritime Safety Community**: For feedback and testing
 - **Open Source Libraries**: All the amazing tools that made this possible
 
