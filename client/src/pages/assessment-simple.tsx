@@ -1,12 +1,10 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle, Clock, Award, Target, BookOpen, Download } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
+import { CheckCircle, XCircle, Clock, Award, Target, BookOpen, Download, AlertTriangle } from "lucide-react";
 import { Link } from "wouter";
 import type { Quiz, Rule } from "@shared/schema";
 import { buildCertificateDownloadText } from "@/lib/certificate-disclaimer";
@@ -31,17 +29,25 @@ interface AssessmentReport {
 
 export default function AssessmentPage() {
   const [assessmentMode, setAssessmentMode] = useState<'select' | 'taking' | 'completed'>('select');
-  const [timeLimit] = useState<number>(30); // minutes
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [assessmentQuestions, setAssessmentQuestions] = useState<AssessmentQuestion[]>([]);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [assessmentReport, setAssessmentReport] = useState<AssessmentReport | null>(null);
-  
-  const queryClient = useQueryClient();
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  // Fetch all rules for assessment setup
-  const { data: rules = [] } = useQuery<Rule[]>({
+  // Warn user before leaving mid-assessment
+  useEffect(() => {
+    if (assessmentMode !== 'taking') return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [assessmentMode]);
+
+  // Fetch rules (used to verify data is available)
+  const { isError: rulesError } = useQuery<Rule[]>({
     queryKey: ["/api/rules"],
   });
 
@@ -225,6 +231,7 @@ export default function AssessmentPage() {
     setStartTime(new Date());
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
+    setShowCancelConfirm(false);
   };
 
   const handleAnswerSelect = (questionId: number, answerIndex: number) => {
@@ -307,6 +314,15 @@ export default function AssessmentPage() {
     
     setAssessmentReport(report);
     setAssessmentMode('completed');
+  };
+
+  const handleCancelAssessment = () => {
+    setAssessmentMode('select');
+    setAssessmentQuestions([]);
+    setSelectedAnswers({});
+    setCurrentQuestionIndex(0);
+    setStartTime(null);
+    setShowCancelConfirm(false);
   };
 
   const formatTime = (seconds: number) => {
@@ -395,6 +411,13 @@ export default function AssessmentPage() {
               </div>
             </div>
 
+            {rulesError && (
+              <div className="flex items-center gap-2 rounded-md border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+                <AlertTriangle size={16} className="shrink-0" />
+                <span>Could not reach the server. The assessment will use built-in questions.</span>
+              </div>
+            )}
+
             <Button
               onClick={createQuickAssessment}
               className="w-full bg-primary hover:bg-primary/90"
@@ -408,6 +431,20 @@ export default function AssessmentPage() {
   }
 
   if (assessmentMode === 'taking') {
+    if (assessmentQuestions.length === 0) {
+      return (
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center gap-2 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+            <AlertTriangle size={16} className="shrink-0" />
+            <span>No questions available. Please go back and try again.</span>
+          </div>
+          <Button className="mt-4" variant="outline" onClick={() => setAssessmentMode('select')}>
+            Go Back
+          </Button>
+        </div>
+      );
+    }
+
     const currentQuestion = assessmentQuestions[currentQuestionIndex];
     const progress = ((currentQuestionIndex + 1) / assessmentQuestions.length) * 100;
     const selectedAnswer = selectedAnswers[currentQuestion?.id];
@@ -417,12 +454,38 @@ export default function AssessmentPage() {
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-2xl font-bold">COLREGS Assessment</h1>
-            <div className="flex items-center space-x-2 text-blue-600">
-              <Clock size={20} />
-              <span>Question {currentQuestionIndex + 1} of {assessmentQuestions.length}</span>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 text-blue-600">
+                <Clock size={20} />
+                <span>Question {currentQuestionIndex + 1} of {assessmentQuestions.length}</span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowCancelConfirm(true)}
+              >
+                Exit Assessment
+              </Button>
             </div>
           </div>
-          
+
+          {showCancelConfirm && (
+            <div className="flex items-center justify-between gap-4 rounded-md border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 mb-3">
+              <div className="flex items-center gap-2">
+                <AlertTriangle size={16} className="shrink-0" />
+                <span>Exit assessment? Your progress will not be saved.</span>
+              </div>
+              <div className="flex gap-2 shrink-0">
+                <Button size="sm" variant="destructive" onClick={handleCancelAssessment}>
+                  Yes, Exit
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => setShowCancelConfirm(false)}>
+                  Continue
+                </Button>
+              </div>
+            </div>
+          )}
+
           <div className="flex justify-between text-sm text-gray-600 mb-2">
             <span>Progress</span>
             <span>{Math.round(progress)}% Complete</span>
@@ -597,5 +660,16 @@ export default function AssessmentPage() {
     );
   }
 
-  return null;
+  // Unexpected state — reset to select screen
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex items-center gap-2 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <AlertTriangle size={16} className="shrink-0" />
+        <span>Something went wrong. Please start over.</span>
+      </div>
+      <Button className="mt-4" variant="outline" onClick={() => setAssessmentMode('select')}>
+        Start Over
+      </Button>
+    </div>
+  );
 }
