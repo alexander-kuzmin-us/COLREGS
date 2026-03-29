@@ -9,3 +9,6 @@ vite.config.ts.*
 .env
 .env.local
 .env.*.local
+
+# Generated Netlify function bundles (built during deploy)
+netlify/functions/*.js
