@@ -8,7 +8,7 @@ import { Link } from "wouter";
 const LEGAL_CONTACT_EMAIL = "legal@colregs-academy.app";
 
 const EFFECTIVE_DATE = "March 28, 2026";
-const LAST_UPDATED = "March 28, 2026";
+const LAST_UPDATED = "March 29, 2026";
 
 export default function TermsOfService() {
   return (
@@ -17,13 +17,13 @@ export default function TermsOfService() {
         <title>Terms of Service | COLREGS Academy</title>
         <meta
           name="description"
-          content="Terms of Service for COLREGS Academy: subscriptions, acceptable use, intellectual property, liability, and dispute resolution."
+          content="Terms of Service for COLREGS Academy: subscriptions when offered, acceptable use, intellectual property, liability, and dispute resolution."
         />
         <link rel="canonical" href="https://colregs-academy.replit.app/terms" />
         <meta property="og:title" content="Terms of Service | COLREGS Academy" />
         <meta
           property="og:description"
-          content="Legal terms governing use of COLREGS Academy, including Pro subscriptions and acceptable use."
+          content="Legal terms governing use of COLREGS Academy, including subscriptions when offered and acceptable use."
         />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://colregs-academy.replit.app/terms" />
@@ -111,11 +111,13 @@ export default function TermsOfService() {
                 subject to change with reasonable notice where required by law.
               </p>
               <p>
-                <strong>Pro tier (paid):</strong> when available, Pro includes enhanced or expanded access
-                such as additional content, advanced analytics, certificates, or other features we describe at
-                checkout or on our pricing page. Exact Pro benefits, limits, and availability may vary by
-                region and may be updated; the description at the time you subscribe controls for your
-                current billing period unless we notify you otherwise as required by law.
+                <strong>Pro tier (paid):</strong> when we launch it, Pro will include enhanced or expanded
+                access such as additional content, advanced analytics, certificates, or other features we
+                describe at checkout or on our pricing page. As of the Last updated date above,{" "}
+                <strong>Pro is not yet available for purchase</strong>; sections 3 and 4 below describe how
+                billing and refunds will work once paid plans go live. Exact Pro benefits, limits, and
+                availability may vary by region and may be updated; the description at the time you subscribe
+                will control for your current billing period unless we notify you otherwise as required by law.
               </p>
               <p>
                 <strong>Fleet / B2B:</strong> if we offer organization or fleet plans, those may include
@@ -150,10 +152,15 @@ export default function TermsOfService() {
                   and secure your credentials.
                 </li>
                 <li>
-                  You must be at least the age of digital consent in your jurisdiction (often 13 or 16) or
-                  have parental consent where required.
+                  You must be at least <strong>13 years old</strong> to use the Service, or older if your
+                  jurisdiction requires a higher age of digital consent (for example, <strong>16</strong> in
+                  many EU and UK situations), or have parental or guardian consent where the law requires it.
                 </li>
               </ul>
+              <p>
+                This Service is <strong>not directed at children under 13</strong>. If we become aware that a
+                user is under 13, we will delete their data.
+              </p>
               <p>
                 We may suspend or terminate accounts that violate these Terms or pose security or legal risk.
               </p>
@@ -166,24 +173,31 @@ export default function TermsOfService() {
             </CardHeader>
             <CardContent className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                <strong>Fees:</strong> Pro and other paid plans are billed in advance through our payment
-                processor (for example, Stripe). Prices, taxes, and currency are shown at checkout. You
-                authorize us and our processors to charge your payment method on a recurring basis for
-                subscription plans.
+                <strong>Pro is not yet available.</strong> Paid checkout, Pro subscriptions, and the
+                billing flows described below are not active on the Service at this time. This section will
+                apply when we launch Pro or other paid plans; until then, you will not be charged
+                subscription fees through us, and the Free tier (and any features we offer without payment)
+                is not governed by the subscription paragraphs below.
               </p>
               <p>
-                <strong>Billing cycle:</strong> subscriptions renew automatically at the end of each billing
-                period (for example, monthly or annually) unless cancelled before the renewal date. The
-                length of your billing period is the one you select at purchase.
+                <strong>Fees (when paid plans are available):</strong> Pro and other paid plans will be billed
+                in advance through our payment processor (for example, Stripe). Prices, taxes, and currency
+                will be shown at checkout. You will authorize us and our processors to charge your payment
+                method on a recurring basis for subscription plans you purchase.
               </p>
               <p>
-                <strong>Renewal:</strong> your payment method will be charged on the renewal date at the then-
-                current rate unless you cancel. We may change prices with advance notice where required by
-                law; changes typically apply to the next renewal after notice.
+                <strong>Billing cycle (when subscribed):</strong> subscriptions renew automatically at the end
+                of each billing period (for example, monthly or annually) unless cancelled before the renewal
+                date. The length of your billing period is the one you select at purchase.
               </p>
               <p>
-                <strong>How to cancel:</strong> you may cancel your subscription through the account or
-                billing settings we provide, or by contacting us at{" "}
+                <strong>Renewal (when subscribed):</strong> your payment method will be charged on the renewal
+                date at the then-current rate unless you cancel. We may change prices with advance notice where
+                required by law; changes typically apply to the next renewal after notice.
+              </p>
+              <p>
+                <strong>How to cancel (when subscribed):</strong> you may cancel your subscription through the
+                account or billing settings we provide, or by contacting us at{" "}
                 <a
                   className="text-primary underline underline-offset-2"
                   href={`mailto:${LEGAL_CONTACT_EMAIL}?subject=Subscription%20cancellation`}
@@ -194,8 +208,8 @@ export default function TermsOfService() {
                 stated in the Refund Policy below.
               </p>
               <p>
-                <strong>Failed payments:</strong> if a payment fails, we may retry and may suspend access
-                until payment succeeds.
+                <strong>Failed payments (when subscribed):</strong> if a payment fails, we may retry and may
+                suspend access until payment succeeds.
               </p>
             </CardContent>
           </Card>
@@ -205,6 +219,16 @@ export default function TermsOfService() {
               <CardTitle className="text-xl">4. Refund policy</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-gray-700 leading-relaxed">
+              <p>
+                The refund rules below apply only after paid subscriptions (including Pro) are offered and you
+                have completed a purchase. They do not apply while no paid plans are available.
+              </p>
+              <p>
+                <strong>EU consumers (right of withdrawal):</strong> If you are an EU consumer, you may have a
+                statutory 14-day right of withdrawal. By starting to use a paid digital service before the end
+                of the withdrawal period, you may waive this right. We will inform you and seek your
+                acknowledgment at checkout.
+              </p>
               <p>
                 <strong>Annual subscriptions:</strong> if you are not satisfied with Pro, you may request a
                 full refund within <strong>fourteen (14) days</strong> of your initial annual purchase,

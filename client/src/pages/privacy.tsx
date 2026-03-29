@@ -8,7 +8,7 @@ import { Link } from "wouter";
 const PRIVACY_CONTACT_EMAIL = "privacy@colregs-academy.app";
 
 const EFFECTIVE_DATE = "March 28, 2026";
-const LAST_UPDATED = "March 28, 2026";
+const LAST_UPDATED = "March 29, 2026";
 
 export default function PrivacyPolicy() {
   return (
@@ -154,6 +154,11 @@ export default function PrivacyPolicy() {
                   prevention and troubleshooting).
                 </li>
               </ul>
+              <p>
+                <strong>Legal basis for processing:</strong> We process your personal data on the basis of
+                contract performance (Art. 6(1)(b) GDPR) to provide the Service, and legitimate interests
+                (Art. 6(1)(f)) for security and abuse prevention.
+              </p>
             </CardContent>
           </Card>
 
@@ -275,6 +280,13 @@ export default function PrivacyPolicy() {
                 </table>
               </div>
               <p>
+                The table lists cookies we set on this domain. We classify them as strictly necessary and
+                not requiring consent here because we do not use analytics, advertising, or other
+                non-essential trackers on this site. Google&apos;s OAuth flow may set cookies on
+                Google&apos;s domains as part of authentication. These are governed by Google&apos;s privacy
+                policy. We do not set additional tracking or analytics cookies.
+              </p>
+              <p>
                 You can control or delete cookies through your browser settings. Blocking or deleting the
                 session cookie will usually sign you out and may prevent login from working until you allow
                 cookies for this site again.
@@ -284,7 +296,38 @@ export default function PrivacyPolicy() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">7. Contact for privacy and data requests</CardTitle>
+              <CardTitle className="text-xl">
+                7. Data controller, EU/UK representative, and DPO
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-gray-700 leading-relaxed">
+              <p>
+                <strong>Controller:</strong> COLREGS Academy is operated from the United States. Our Terms of
+                Service are governed by the laws of the State of Delaware, USA. For privacy and data rights
+                requests, use the contact email in section 8 below.
+              </p>
+              <p>
+                <strong>Data Protection Officer (DPO):</strong> We have not designated a Data Protection
+                Officer. Under the GDPR, a DPO is required only in specific cases (for example certain
+                large-scale monitoring or processing of special categories of data on a large scale); our
+                processing does not currently require a DPO.
+              </p>
+              <p>
+                <strong>EU and UK representative (Article 27 GDPR / UK GDPR):</strong> We have{" "}
+                <strong>not</strong> appointed a representative in the European Union or the United Kingdom.
+                The Service is offered in English and is accessible worldwide; we do{" "}
+                <strong>not</strong> specifically target or market to people in the European Economic Area,
+                Switzerland, or the United Kingdom. EU or UK residents who choose to use the Service may
+                contact us at the email in section 8 and may lodge a complaint with their local supervisory
+                authority. If we appoint an EU or UK representative where required by law or voluntarily, we
+                will list their name and contact details in this section.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">8. Contact for privacy and data requests</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-gray-700 leading-relaxed">
               <p>
@@ -304,7 +347,7 @@ export default function PrivacyPolicy() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">8. Changes</CardTitle>
+              <CardTitle className="text-xl">9. Changes</CardTitle>
             </CardHeader>
             <CardContent className="text-gray-700 leading-relaxed">
               <p>
