@@ -53,11 +53,13 @@ COLREGS Academy is a comprehensive maritime safety education platform that teach
 
 ### Prerequisites
 
-- Node.js 20 or higher
-- PostgreSQL database (or Neon account)
-- npm or yarn package manager
+- Node.js 20 or higher (`brew install node@20` on macOS)
+- npm package manager
+- A free [Neon](https://neon.tech) account for the database
 
-### Installation
+> **Note:** This project uses the Neon serverless PostgreSQL HTTP driver (`@netlify/neon`), which requires a Neon database. A standard local PostgreSQL server is not compatible without code modifications.
+
+### Local Development Setup
 
 1. **Clone the repository**
    ```bash
@@ -70,44 +72,50 @@ COLREGS Academy is a comprehensive maritime safety education platform that teach
    npm install
    ```
 
-3. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
+3. **Create a Neon database**
+   - Sign up at [neon.tech](https://neon.tech) (free tier available)
+   - Create a new project
+   - Copy the connection string (format: `postgresql://user:pass@ep-xxx.neon.tech/neondb?sslmode=require`)
+
+4. **Set up environment variables**
+
+   Create or edit the `.env` file in the root directory:
    ```env
-   DATABASE_URL=your_postgresql_connection_string
+   NETLIFY_DATABASE_URL=postgresql://user:password@ep-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require
    NODE_ENV=development
-   
+   SESSION_SECRET=your-random-session-secret
+   JWT_SECRET=your-random-jwt-secret
+
+   # Optional: Email magic link login (Resend)
+   RESEND_API_KEY=your_resend_api_key
+
    # Optional: Google OAuth for user authentication
    GOOGLE_CLIENT_ID=your_google_client_id
    GOOGLE_CLIENT_SECRET=your_google_client_secret
    ```
 
-4. **Set up the database**
+5. **Push the database schema**
    ```bash
-   # Push schema to database
    npm run db:push
-   
-   # Seed the database with COLREGS data
-   npm run seed
    ```
 
-5. **Start the development server**
+6. **Seed the database with COLREGS data**
+   ```bash
+   npx tsx -e "import('./server/seed.ts').then(m => m.clearAndReseed()).then(() => { console.log('Seeding complete'); process.exit(0); }).catch(e => { console.error(e); process.exit(1); })"
+   ```
+
+7. **Start the development server**
    ```bash
    npm run dev
    ```
 
-6. **Open your browser**
-   
+8. **Open your browser**
+
    Navigate to `http://localhost:5000` to access the application.
 
-### Alternative Setup with Replit
+### Alternative Setup with Netlify
 
-This project is designed to run seamlessly on Replit:
-
-1. Fork or import the repository into Replit
-2. The PostgreSQL database will be automatically provisioned
-3. Run the "Start application" workflow to begin development
-4. The application will be available at your Replit URL
+This project is designed to deploy on Netlify with a provisioned Neon database. See [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md) for full deployment instructions.
 
 ## 🔐 Authentication Setup (Optional)
 
@@ -128,8 +136,8 @@ COLREGS Academy supports Google OAuth for user authentication and progress track
    - Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"
    - Application type: Web application
    - Add authorized redirect URIs:
-     - Production: `https://your-app.replit.app/api/auth/google/callback`
-     - Development: `https://your-replit-domain/api/auth/google/callback`
+     - Local development: `http://localhost:5000/api/auth/google/callback`
+     - Production: `https://your-domain.com/api/auth/google/callback`
 
 4. **Configure Environment Variables**
    ```env
@@ -229,8 +237,7 @@ colregs-academy/
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run db:push` - Push schema changes to database
-- `npm run db:studio` - Open Drizzle Studio for database management
-- `npm run seed` - Seed database with COLREGS rules and quizzes
+- `npm run check` - TypeScript type checking
 
 ## 🏗️ Architecture Overview
 
@@ -317,24 +324,23 @@ The application uses a consistent design system built with:
 ### Environment Variables
 
 ```env
-# Database
-DATABASE_URL=postgresql://user:password@host:port/database
+# Database (required) — Neon serverless PostgreSQL connection string
+NETLIFY_DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/neondb?sslmode=require
 
 # Development
 NODE_ENV=development
-PORT=5000
+
+# Session & JWT Security (required)
+SESSION_SECRET=your-random-session-secret
+JWT_SECRET=your-random-jwt-secret
 
 # Authentication (Optional)
 GOOGLE_CLIENT_ID=your_google_oauth_client_id
 GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 
-# Session Security (Optional)
-SESSION_SECRET=your_session_secret_key
-
-# Optional: Replit-specific variables (auto-configured)
-REPLIT_DB_URL=
-REPL_ID=
-REPLIT_DOMAIN=
+# Email magic links (Optional — requires Resend account)
+RESEND_API_KEY=your_resend_api_key
+APP_URL=http://localhost:5000
 ```
 
 ### Tailwind Configuration
