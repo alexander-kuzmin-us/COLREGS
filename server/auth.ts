@@ -9,12 +9,15 @@ import { storage } from "./storage";
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   const pgStore = connectPg(session);
-  const sessionStore = new pgStore({
-    conString: process.env.NETLIFY_DATABASE_URL,
-    createTableIfMissing: true,
-    ttl: sessionTtl,
-    tableName: "sessions",
-  });
+  const useMemorySession = process.env.USE_MEMORY_STORAGE === "true";
+  const sessionStore = useMemorySession
+    ? undefined
+    : new pgStore({
+        conString: process.env.NETLIFY_DATABASE_URL,
+        createTableIfMissing: true,
+        ttl: sessionTtl,
+        tableName: "sessions",
+      });
   
   return session({
     name: "session",

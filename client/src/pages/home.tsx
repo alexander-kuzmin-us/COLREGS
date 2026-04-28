@@ -153,7 +153,7 @@ export default function Home() {
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
                 <Link href="/achievements">
-                  <Trophy className="mr-1" size={14} />
+                  <Trophy className="mr-1 shrink-0" size={14} />
                   Achievements
                 </Link>
               </Button>
@@ -219,13 +219,13 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
               <Button className="bg-primary hover:bg-primary/90 w-full sm:w-auto" asChild>
                 <Link href="/rule/1">
-                  <BookOpen className="mr-2" size={16} />
+                  <BookOpen className="mr-2 shrink-0" size={16} />
                   Start Learning
                 </Link>
               </Button>
               <Button variant="outline" className="w-full sm:w-auto" asChild>
                 <Link href="/assessment">
-                  <Target className="mr-2" size={16} />
+                  <Target className="mr-2 shrink-0" size={16} />
                   Take Assessment
                 </Link>
               </Button>
@@ -291,20 +291,20 @@ export default function Home() {
             return (
               <Card key={part}>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-xl">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <CardTitle className="text-lg sm:text-xl break-words">
                         Part {part} - {partRules[0]?.partTitle}
                       </CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
                         {partRules.length} rules • {completedInPart} completed
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="w-full sm:w-auto sm:text-right">
                       <div className="text-2xl font-bold text-primary">
                         {Math.round(partProgress)}%
                       </div>
-                      <Progress value={partProgress} className="w-24 mt-1" />
+                      <Progress value={partProgress} className="w-full sm:w-24 mt-1" />
                     </div>
                   </div>
                 </CardHeader>

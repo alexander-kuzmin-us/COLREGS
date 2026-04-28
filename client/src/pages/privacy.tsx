@@ -74,7 +74,7 @@ export default function PrivacyPolicy() {
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Shield className="text-primary" size={32} />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 break-words">Privacy Policy</h1>
           <p className="text-sm text-gray-600">
             <span className="font-medium text-gray-800">Effective date:</span> {EFFECTIVE_DATE}
             {" · "}

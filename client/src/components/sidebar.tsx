@@ -117,11 +117,11 @@ export default function Sidebar({ currentRuleId }: SidebarProps) {
                   <CollapsibleTrigger asChild>
                     <Button
                       variant="ghost"
-                      className={`w-full justify-between p-3 h-auto ${
+                      className={`w-full justify-between gap-3 p-3 h-auto whitespace-normal ${
                         hasCurrentRule ? 'border border-primary/30 bg-primary/5' : 'border border-gray-200'
                       }`}
                     >
-                      <div className="flex items-center space-x-3">
+                      <div className="flex min-w-0 items-center gap-3 text-left">
                         <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                           partProgress === 100 
                             ? 'bg-green-500 text-white' 
@@ -135,12 +135,12 @@ export default function Sidebar({ currentRuleId }: SidebarProps) {
                             completedInPart
                           )}
                         </div>
-                        <span className="font-medium text-gray-900">Part {part} - {partRules[0]?.partTitle}</span>
+                        <span className="min-w-0 font-medium text-gray-900 break-words">Part {part} - {partRules[0]?.partTitle}</span>
                       </div>
                       {isExpanded ? (
-                        <ChevronUp className="text-gray-400" size={16} />
+                        <ChevronUp className="text-gray-400 shrink-0" size={16} />
                       ) : (
-                        <ChevronDown className="text-gray-400" size={16} />
+                        <ChevronDown className="text-gray-400 shrink-0" size={16} />
                       )}
                     </Button>
                   </CollapsibleTrigger>
@@ -154,15 +154,15 @@ export default function Sidebar({ currentRuleId }: SidebarProps) {
                           <div key={rule.id}>
                             {isClickable ? (
                               <Link href={`/rule/${rule.ruleNumber}`}>
-                                <div className={`flex items-center space-x-3 text-sm py-1 px-2 rounded cursor-pointer ${getStatusColor(status)}`}>
+                                <div className={`flex items-start gap-3 text-sm py-1 px-2 rounded cursor-pointer ${getStatusColor(status)}`}>
                                   {getStatusIcon(status)}
-                                  <span>Rule {rule.ruleNumber} - {rule.title}</span>
+                                  <span className="min-w-0 break-words">Rule {rule.ruleNumber} - {rule.title}</span>
                                 </div>
                               </Link>
                             ) : (
-                              <div className={`flex items-center space-x-3 text-sm py-1 px-2 ${getStatusColor(status)}`}>
+                              <div className={`flex items-start gap-3 text-sm py-1 px-2 ${getStatusColor(status)}`}>
                                 {getStatusIcon(status)}
-                                <span>Rule {rule.ruleNumber} - {rule.title}</span>
+                                <span className="min-w-0 break-words">Rule {rule.ruleNumber} - {rule.title}</span>
                               </div>
                             )}
                           </div>

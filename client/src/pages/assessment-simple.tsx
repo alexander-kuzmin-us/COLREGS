@@ -380,7 +380,7 @@ export default function AssessmentPage() {
           </Link>
         </div>
         
-        <h1 className="text-3xl font-bold mb-8">COLREGS Comprehensive Assessment</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-8 break-words">COLREGS Comprehensive Assessment</h1>
         
         <Card className="mb-6">
           <CardHeader>
@@ -412,9 +412,9 @@ export default function AssessmentPage() {
             </div>
 
             {rulesError && (
-              <div className="flex items-center gap-2 rounded-md border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+              <div className="flex items-start gap-2 rounded-md border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
                 <AlertTriangle size={16} className="shrink-0" />
-                <span>Could not reach the server. The assessment will use built-in questions.</span>
+                <span className="min-w-0">Could not reach the server. The assessment will use built-in questions.</span>
               </div>
             )}
 
@@ -452,16 +452,17 @@ export default function AssessmentPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="text-2xl font-bold">COLREGS Assessment</h1>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-blue-600">
-                <Clock size={20} />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-2">
+            <h1 className="text-xl sm:text-2xl font-bold break-words">COLREGS Assessment</h1>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              <div className="flex items-center gap-2 text-blue-600">
+                <Clock size={20} className="shrink-0" />
                 <span>Question {currentQuestionIndex + 1} of {assessmentQuestions.length}</span>
               </div>
               <Button
                 variant="outline"
                 size="sm"
+                className="h-auto min-h-9 whitespace-normal"
                 onClick={() => setShowCancelConfirm(true)}
               >
                 Exit Assessment
@@ -470,16 +471,16 @@ export default function AssessmentPage() {
           </div>
 
           {showCancelConfirm && (
-            <div className="flex items-center justify-between gap-4 rounded-md border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 mb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-3 rounded-md border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 mb-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-2">
                 <AlertTriangle size={16} className="shrink-0" />
-                <span>Exit assessment? Your progress will not be saved.</span>
+                <span className="min-w-0">Exit assessment? Your progress will not be saved.</span>
               </div>
-              <div className="flex gap-2 shrink-0">
-                <Button size="sm" variant="destructive" onClick={handleCancelAssessment}>
+              <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
+                <Button size="sm" variant="destructive" className="h-auto min-h-9 whitespace-normal" onClick={handleCancelAssessment}>
                   Yes, Exit
                 </Button>
-                <Button size="sm" variant="outline" onClick={() => setShowCancelConfirm(false)}>
+                <Button size="sm" variant="outline" className="h-auto min-h-9 whitespace-normal" onClick={() => setShowCancelConfirm(false)}>
                   Continue
                 </Button>
               </div>
@@ -496,8 +497,8 @@ export default function AssessmentPage() {
         {currentQuestion && (
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline">Rule {currentQuestion.ruleNumber}</Badge>
                   <Badge className={getDifficultyColor(currentQuestion.difficulty || 'medium')}>
                     {getDifficultyIcon(currentQuestion.difficulty || 'medium')}
@@ -508,7 +509,7 @@ export default function AssessmentPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <h3 className="text-lg font-medium mb-4">{currentQuestion.question}</h3>
+              <h3 className="text-base sm:text-lg font-medium mb-4 break-words">{currentQuestion.question}</h3>
               
               <div className="space-y-3 mb-6">
                 {currentQuestion.options.map((option, index) => {
@@ -517,7 +518,7 @@ export default function AssessmentPage() {
                   return (
                     <label 
                       key={index}
-                      className={`flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-colors ${
+                        className={`flex items-start gap-3 p-3 sm:p-4 border rounded-lg cursor-pointer transition-colors ${
                         isSelected 
                           ? "border-primary bg-primary/5" 
                           : "border-gray-200 hover:bg-gray-50"
@@ -532,15 +533,16 @@ export default function AssessmentPage() {
                         onChange={() => handleAnswerSelect(currentQuestion.id, index)}
                         className="mt-1 text-primary"
                       />
-                      <span className="text-gray-700 flex-1">{option}</span>
+                      <span className="min-w-0 text-sm sm:text-base text-gray-700 flex-1 break-words">{option}</span>
                     </label>
                   );
                 })}
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
                 <Button
                   variant="outline"
+                  className="w-full sm:w-auto"
                   onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
                   disabled={currentQuestionIndex === 0}
                 >
@@ -550,6 +552,7 @@ export default function AssessmentPage() {
                 <Button
                   onClick={handleNextQuestion}
                   disabled={selectedAnswer === undefined}
+                  className="w-full sm:w-auto h-auto min-h-10 whitespace-normal"
                 >
                   {currentQuestionIndex === assessmentQuestions.length - 1 ? "Submit Assessment" : "Next Question"}
                 </Button>
@@ -564,33 +567,33 @@ export default function AssessmentPage() {
   if (assessmentMode === 'completed' && assessmentReport) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Assessment Results</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-8 break-words">Assessment Results</h1>
         
         <div className="grid gap-6 mb-8">
           {/* Overall Score */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+              <CardTitle className="flex items-start gap-2 break-words">
                 {assessmentReport.passingGrade ? (
-                  <CheckCircle className="text-green-600" size={24} />
+                  <CheckCircle className="text-green-600 shrink-0" size={24} />
                 ) : (
-                  <XCircle className="text-red-600" size={24} />
+                  <XCircle className="text-red-600 shrink-0" size={24} />
                 )}
                 <span>Overall Performance</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">{assessmentReport.score.toFixed(1)}%</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-primary">{assessmentReport.score.toFixed(1)}%</div>
                   <div className="text-sm text-gray-600">Final Score</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold">{assessmentReport.correctAnswers}/{assessmentReport.totalQuestions}</div>
+                  <div className="text-2xl sm:text-3xl font-bold">{assessmentReport.correctAnswers}/{assessmentReport.totalQuestions}</div>
                   <div className="text-sm text-gray-600">Correct Answers</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold">{formatTime(assessmentReport.timeSpent)}</div>
+                  <div className="text-2xl sm:text-3xl font-bold">{formatTime(assessmentReport.timeSpent)}</div>
                   <div className="text-sm text-gray-600">Time Taken</div>
                 </div>
                 <div className="text-center">
@@ -624,11 +627,11 @@ export default function AssessmentPage() {
             <CardContent>
               <div className="space-y-3">
                 {Object.entries(assessmentReport.partBreakdown).map(([part, data]) => (
-                  <div key={part} className="flex items-center justify-between">
+                  <div key={part} className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <span className="font-medium">Part {part}</span>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       <span className="text-sm text-gray-600">{data.correct}/{data.total}</span>
-                      <div className="w-32">
+                      <div className="min-w-0 flex-1 sm:w-32">
                         <Progress value={data.score} />
                       </div>
                       <span className="text-sm font-medium w-12">{data.score.toFixed(0)}%</span>
@@ -640,20 +643,20 @@ export default function AssessmentPage() {
           </Card>
         </div>
 
-        <div className="flex space-x-4">
-          <Button onClick={() => setAssessmentMode('select')} variant="outline">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Button onClick={() => setAssessmentMode('select')} variant="outline" className="h-auto min-h-10 whitespace-normal">
             Take Another Assessment
           </Button>
           
           {assessmentReport.passingGrade && (
-            <Button onClick={downloadCertificate} className="flex items-center space-x-2">
-              <Download size={16} />
+            <Button onClick={downloadCertificate} className="flex h-auto min-h-10 items-center gap-2 whitespace-normal">
+              <Download size={16} className="shrink-0" />
               <span>Download Certificate</span>
             </Button>
           )}
           
           <Link href="/">
-            <Button variant="outline">Back to Home</Button>
+            <Button variant="outline" className="w-full h-auto min-h-10 whitespace-normal sm:w-auto">Back to Home</Button>
           </Link>
         </div>
       </div>

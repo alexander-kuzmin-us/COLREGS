@@ -20,6 +20,10 @@ export async function clearAndReseed() {
   [...baseRules, ...extendedRules].forEach(rule => {
     ruleMap.set(rule.ruleNumber, rule.id);
   });
+  const fallbackRuleId = ruleMap.get("11");
+  if (!fallbackRuleId) {
+    throw new Error("Rule 11 must exist before inserting comprehensive quizzes");
+  }
   
   console.log("Inserting base quizzes...");
   const baseQuizzes = completeColregsQuizzes.map(quiz => ({
@@ -41,7 +45,7 @@ export async function clearAndReseed() {
     
     return {
       ...quiz,
-      ruleId: ruleMap.get(ruleNumber) || ruleMap.get("11")
+      ruleId: ruleMap.get(ruleNumber) || fallbackRuleId
     };
   });
   await db.insert(quizzes).values(extendedQuizzes).returning();

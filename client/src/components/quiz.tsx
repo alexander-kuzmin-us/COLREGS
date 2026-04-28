@@ -140,7 +140,7 @@ export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps)
         />
       )}
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <CardTitle className="text-base sm:text-lg">Knowledge Check</CardTitle>
           <div className="text-xs sm:text-sm text-gray-600">
             <span className="font-medium">Question {currentQuizIndex + 1} of {quizzes.length}</span>
@@ -190,12 +190,12 @@ export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps)
                     disabled={hasSubmitted}
                     className="mt-1 text-primary"
                   />
-                  <span className="text-gray-700 flex-1 text-sm sm:text-base">{option}</span>
+                  <span className="min-w-0 text-gray-700 flex-1 text-sm sm:text-base break-words">{option}</span>
                   {hasSubmitted && isCorrect && (
-                    <CheckCircle className="text-green-600" size={18} />
+                    <CheckCircle className="text-green-600 shrink-0" size={18} />
                   )}
                   {hasSubmitted && isIncorrect && (
-                    <XCircle className="text-red-600" size={18} />
+                    <XCircle className="text-red-600 shrink-0" size={18} />
                   )}
                 </label>
               );
@@ -212,11 +212,11 @@ export default function QuizSection({ quizzes, ruleId, rule }: QuizSectionProps)
               ) : (
                 <XCircle className="text-red-600 mt-0.5" size={20} />
               )}
-              <div>
+              <div className="min-w-0">
                 <div className="font-medium mb-1">
                   {result.correct ? "Correct!" : "Incorrect"}
                 </div>
-                <AlertDescription className={result.correct ? "text-green-800" : "text-red-800"}>
+                <AlertDescription className={`${result.correct ? "text-green-800" : "text-red-800"} break-words`}>
                   {result.explanation}
                 </AlertDescription>
               </div>

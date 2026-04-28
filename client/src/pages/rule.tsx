@@ -191,14 +191,14 @@ export default function RulePage() {
       {/* Breadcrumb */}
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-2 py-3 text-sm">
-            <Link href="/" className="text-primary hover:text-primary/80">
+          <div className="flex flex-wrap items-center gap-2 py-3 text-sm">
+            <Link href="/" className="text-primary hover:text-primary/80 shrink-0">
               Home
             </Link>
-            <ChevronRight className="text-gray-400" size={14} />
-            <span className="text-primary">Part {rule.part} - {rule.partTitle}</span>
-            <ChevronRight className="text-gray-400" size={14} />
-            <span className="text-gray-500">Rule {rule.ruleNumber} - {rule.title}</span>
+            <ChevronRight className="text-gray-400 shrink-0" size={14} />
+            <span className="text-primary min-w-0">Part {rule.part} - {rule.partTitle}</span>
+            <ChevronRight className="text-gray-400 shrink-0" size={14} />
+            <span className="text-gray-500 min-w-0">Rule {rule.ruleNumber} - {rule.title}</span>
           </div>
         </div>
       </nav>
@@ -217,8 +217,8 @@ export default function RulePage() {
               <CardContent className="p-4 sm:p-6 lg:p-8">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-lg flex items-center justify-center">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-lg flex shrink-0 items-center justify-center">
                         <Eye className="text-white" size={16} />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -231,7 +231,7 @@ export default function RulePage() {
                     
                     <Alert className="border-amber-200 bg-amber-50">
                       <Lightbulb className="h-4 w-4 text-amber-600" />
-                      <AlertDescription className="text-amber-800">
+                      <AlertDescription className="text-amber-800 break-words">
                         <strong>Key Learning Objective:</strong> {rule.plainEnglish}
                       </AlertDescription>
                     </Alert>
@@ -273,9 +273,9 @@ export default function RulePage() {
                 {/* Key Points */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6">
-                    <div className="flex items-start space-x-3">
-                      <CheckCircle className="text-green-600 mt-1" size={18} />
-                      <div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="text-green-600 mt-1 shrink-0" size={18} />
+                      <div className="min-w-0">
                         <h4 className="font-semibold text-green-900 mb-2 text-sm sm:text-base">Key Points</h4>
                         <ul className="text-green-800 space-y-1 text-xs sm:text-sm">
                           {rule.keyPoints.map((point, index) => (
@@ -287,9 +287,9 @@ export default function RulePage() {
                   </div>
 
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
-                    <div className="flex items-start space-x-3">
-                      <AlertTriangle className="text-red-600 mt-1" size={18} />
-                      <div>
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="text-red-600 mt-1 shrink-0" size={18} />
+                      <div className="min-w-0">
                         <h4 className="font-semibold text-red-900 mb-2 text-sm sm:text-base">Common Violations</h4>
                         <ul className="text-red-800 space-y-1 text-xs sm:text-sm">
                           {rule.commonViolations.map((violation, index) => (
@@ -323,8 +323,8 @@ export default function RulePage() {
                       return (
                         <Link key={relatedRuleNumber} href={`/rule/${relatedRuleNumber}`}>
                           <div className="block p-3 sm:p-4 border border-gray-200 rounded-lg hover:border-primary/30 hover:shadow-md transition-all">
-                            <div className="flex items-center space-x-2 sm:space-x-3">
-                              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary/10 rounded-lg flex shrink-0 items-center justify-center">
                                 <span className="text-primary font-bold text-xs sm:text-sm">{relatedRuleNumber}</span>
                               </div>
                               <div className="min-w-0 flex-1">
@@ -347,7 +347,7 @@ export default function RulePage() {
                 <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
                   {previousRule ? (
                     <Link href={`/rule/${previousRule.ruleNumber}`} className="w-full sm:w-auto">
-                      <Button variant="outline" className="w-full sm:w-auto flex items-center space-x-2">
+                      <Button variant="outline" className="w-full sm:w-auto h-auto min-h-10 whitespace-normal flex items-center gap-2">
                         <ChevronLeft size={16} />
                         <div className="text-left hidden sm:block">
                           <div className="font-medium">Previous Rule</div>
@@ -363,15 +363,15 @@ export default function RulePage() {
                   <Button 
                     onClick={handleMarkComplete}
                     disabled={isCompleted}
-                    className={`w-full sm:w-auto ${isCompleted ? "bg-green-600 hover:bg-green-700" : "bg-green-600 hover:bg-green-700"}`}
+                    className={`w-full sm:w-auto h-auto min-h-10 whitespace-normal ${isCompleted ? "bg-green-600 hover:bg-green-700" : "bg-green-600 hover:bg-green-700"}`}
                   >
-                    <Check className="mr-2" size={16} />
+                    <Check className="mr-2 shrink-0" size={16} />
                     {isCompleted ? "Completed" : "Mark as Complete"}
                   </Button>
                   
                   {nextRule ? (
                     <Link href={`/rule/${nextRule.ruleNumber}`} className="w-full sm:w-auto">
-                      <Button variant="outline" className="w-full sm:w-auto flex items-center space-x-2">
+                      <Button variant="outline" className="w-full sm:w-auto h-auto min-h-10 whitespace-normal flex items-center gap-2">
                         <span className="sm:hidden">Next</span>
                         <div className="text-right hidden sm:block">
                           <div className="font-medium">Next Rule</div>

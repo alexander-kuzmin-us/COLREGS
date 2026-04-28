@@ -13,26 +13,26 @@ export default function AchievementsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         {/* Navigation Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Button variant="outline" asChild className="flex items-center gap-2">
+        <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
+          <Button variant="outline" asChild className="flex h-auto min-h-10 items-center gap-2 whitespace-normal">
             <Link href="/">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4 shrink-0" />
               Back to Home
             </Link>
           </Button>
-          <Button variant="ghost" asChild className="flex items-center gap-2">
+          <Button variant="ghost" asChild className="flex h-auto min-h-10 items-center gap-2 whitespace-normal">
             <Link href="/">
-              <Home className="h-4 w-4" />
+              <Home className="h-4 w-4 shrink-0" />
               Home
             </Link>
           </Button>
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 break-words">
             Maritime Achievements
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
             Track your progress through COLREGS mastery with maritime-inspired badges. 
             Complete quizzes, achieve perfect scores, and master rule sections to earn achievements.
           </p>

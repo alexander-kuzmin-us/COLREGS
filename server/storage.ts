@@ -68,6 +68,7 @@ export class MemStorage implements IStorage {
   async upsertUser(userData: InsertUser): Promise<User> {
     const user: User = {
       ...userData,
+      picture: userData.picture || null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -103,10 +104,102 @@ export class MemStorage implements IStorage {
     // Return empty array for in-memory implementation
     return [];
   }
+
+  async getUserAchievements(userId: string): Promise<Achievement[]> {
+    return Array.from(this.achievements.values())
+      .filter(achievement => achievement.userId === userId)
+      .sort((a, b) => a.earnedAt.getTime() - b.earnedAt.getTime());
+  }
+
+  async createAchievement(insertAchievement: InsertAchievement): Promise<Achievement> {
+    const id = this.currentProgressId++;
+    const achievement: Achievement = {
+      ...insertAchievement,
+      id,
+      userId: insertAchievement.userId || "default",
+      ruleId: insertAchievement.ruleId || null,
+      partName: insertAchievement.partName || null,
+      earnedAt: new Date(),
+      shared: insertAchievement.shared || false,
+      sharedAt: insertAchievement.sharedAt || null,
+    };
+    this.achievements.set(id, achievement);
+    return achievement;
+  }
+
+  async updateAchievementShared(achievementId: number, shared: boolean): Promise<Achievement> {
+    const existing = this.achievements.get(achievementId);
+    if (!existing) {
+      throw new Error("Achievement not found");
+    }
+
+    const updated: Achievement = {
+      ...existing,
+      shared,
+      sharedAt: shared ? new Date() : null,
+    };
+    this.achievements.set(achievementId, updated);
+    return updated;
+  }
+
+  async checkAndAwardAchievements(userId: string, quizScore?: number, ruleId?: number, partName?: string): Promise<Achievement[]> {
+    const newAchievements: Achievement[] = [];
+    const existingAchievements = await this.getUserAchievements(userId);
+    const hasFirstQuiz = existingAchievements.some(achievement => achievement.badgeType === "first_quiz");
+
+    if (!hasFirstQuiz && quizScore !== undefined) {
+      newAchievements.push(await this.createAchievement({
+        userId,
+        badgeType: "first_quiz",
+        badgeTitle: "First Mate",
+        badgeDescription: "Completed your first quiz",
+        iconName: "anchor",
+        ruleId,
+      }));
+    }
+
+    if (quizScore === 100) {
+      newAchievements.push(await this.createAchievement({
+        userId,
+        badgeType: "perfect_score",
+        badgeTitle: "Navigation Master",
+        badgeDescription: "Achieved a perfect score on a quiz",
+        iconName: "compass",
+        ruleId,
+      }));
+    }
+
+    if (partName) {
+      const allRules = await this.getAllRules();
+      const userProgress = await this.getUserProgress(userId);
+      const partRules = allRules.filter(rule => rule.part === partName);
+      const completedPartRules = userProgress.filter(progress =>
+        progress.completed && partRules.some(rule => rule.id === progress.ruleId)
+      );
+      const hasPartMaster = existingAchievements.some(achievement =>
+        achievement.badgeType === "part_master" && achievement.partName === partName
+      );
+
+      if (!hasPartMaster && partRules.length > 0 && completedPartRules.length === partRules.length) {
+        newAchievements.push(await this.createAchievement({
+          userId,
+          badgeType: "part_master",
+          badgeTitle: `Part ${partName} Captain`,
+          badgeDescription: `Mastered all rules in Part ${partName}`,
+          iconName: "ship-wheel",
+          partName,
+        }));
+      }
+    }
+
+    return newAchievements;
+  }
+
   private users: Map<string, User>;
   private rules: Map<number, Rule>;
   private quizzes: Map<number, Quiz>;
   private progress: Map<string, Progress>;
+  private achievements: Map<number, Achievement>;
   private currentRuleId: number;
   private currentQuizId: number;
   private currentProgressId: number;
@@ -116,6 +209,7 @@ export class MemStorage implements IStorage {
     this.rules = new Map();
     this.quizzes = new Map();
     this.progress = new Map();
+    this.achievements = new Map();
     this.currentRuleId = 1;
     this.currentQuizId = 1;
     this.currentProgressId = 1;
@@ -241,7 +335,7 @@ export class MemStorage implements IStorage {
 
   async createQuiz(insertQuiz: InsertQuiz): Promise<Quiz> {
     const id = this.currentQuizId++;
-    const quiz: Quiz = { ...insertQuiz, id };
+    const quiz: Quiz = { ...insertQuiz, id, difficulty: insertQuiz.difficulty || "medium" };
     this.quizzes.set(id, quiz);
     return quiz;
   }
@@ -267,8 +361,15 @@ export class MemStorage implements IStorage {
 
   async createProgress(insertProgress: InsertProgress): Promise<Progress> {
     const id = this.currentProgressId++;
-    const progress: Progress = { ...insertProgress, id };
-    this.progress.set(`${insertProgress.userId}-${insertProgress.ruleId}`, progress);
+    const progress: Progress = {
+      ...insertProgress,
+      id,
+      userId: insertProgress.userId || "default",
+      completed: insertProgress.completed || false,
+      quizScore: insertProgress.quizScore || null,
+      completedAt: insertProgress.completedAt || null,
+    };
+    this.progress.set(`${progress.userId}-${progress.ruleId}`, progress);
     return progress;
   }
 }
@@ -493,5 +594,6 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-// Use DatabaseStorage instead of MemStorage
-export const storage = new DatabaseStorage();
+export const storage: IStorage = process.env.USE_MEMORY_STORAGE === "true"
+  ? new MemStorage()
+  : new DatabaseStorage();

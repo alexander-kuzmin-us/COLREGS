@@ -140,10 +140,10 @@ export default function AchievementDisplay({ userId, compact = false }: Achievem
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-6">
-        <Trophy className="h-6 w-6 text-yellow-600" />
-        <h2 className="text-2xl font-bold">Maritime Achievements</h2>
-        <Badge variant="outline" className="ml-auto">
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <Trophy className="h-6 w-6 shrink-0 text-yellow-600" />
+        <h2 className="min-w-0 text-xl sm:text-2xl font-bold break-words">Maritime Achievements</h2>
+        <Badge variant="outline" className="sm:ml-auto">
           {achievements.length} Badge{achievements.length !== 1 ? 's' : ''}
         </Badge>
       </div>
@@ -152,20 +152,20 @@ export default function AchievementDisplay({ userId, compact = false }: Achievem
         {achievements.map((achievement: Achievement) => (
           <Card key={achievement.id} className="relative">
             <CardHeader className="pb-3">
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${getBadgeColor(achievement.badgeType)}`}>
+              <div className="flex items-start gap-3">
+                <div className={`shrink-0 p-2 rounded-lg ${getBadgeColor(achievement.badgeType)}`}>
                   {getBadgeIcon(achievement.iconName)}
                 </div>
-                <div className="flex-1">
-                  <CardTitle className="text-lg">{achievement.badgeTitle}</CardTitle>
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="text-lg break-words">{achievement.badgeTitle}</CardTitle>
                   <CardDescription>{achievement.badgeDescription}</CardDescription>
                 </div>
               </div>
             </CardHeader>
             
             <CardContent>
-              <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                <Calendar className="h-4 w-4" />
+              <div className="flex items-start gap-2 text-sm text-gray-600 mb-3">
+                <Calendar className="h-4 w-4 shrink-0" />
                 <span>Earned {new Date(achievement.earnedAt).toLocaleDateString()}</span>
               </div>
               
@@ -175,17 +175,18 @@ export default function AchievementDisplay({ userId, compact = false }: Achievem
                 </Badge>
               )}
               
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <Button
                   variant={achievement.shared ? "default" : "outline"}
                   size="sm"
+                  className="h-auto min-h-9 whitespace-normal"
                   onClick={() => shareAchievement.mutate({ 
                     achievementId: achievement.id, 
                     shared: !achievement.shared 
                   })}
                   disabled={shareAchievement.isPending}
                 >
-                  <Share2 className="h-4 w-4 mr-1" />
+                  <Share2 className="h-4 w-4 mr-1 shrink-0" />
                   {achievement.shared ? 'Shared' : 'Share'}
                 </Button>
                 

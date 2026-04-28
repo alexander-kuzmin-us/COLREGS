@@ -27,7 +27,7 @@ export default function RuleTextDisplay({ title, text, isOfficial = false }: Rul
                   {letter}
                 </span>
               </div>
-              <div className="flex-1">
+              <div className="min-w-0 flex-1">
                 <p className={`text-sm leading-relaxed ${
                   isOfficial ? 'text-gray-700' : 'text-gray-600'
                 }`}>
@@ -52,7 +52,7 @@ export default function RuleTextDisplay({ title, text, isOfficial = false }: Rul
 
   return (
     <Card className={isOfficial ? 'border-l-4 border-l-primary bg-blue-50/50' : ''}>
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6">
         <h3 className={`font-semibold mb-4 ${
           isOfficial ? 'text-primary text-base' : 'text-gray-900 text-sm'
         }`}>
